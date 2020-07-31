@@ -1,0 +1,8 @@
+rbac:
+  permit-list:
+  #通用业务不需要鉴权
+  - /api/*
+  - /actuator/refresh
+  resource-list:
+  - roleId: portalUser
+    resource: /*

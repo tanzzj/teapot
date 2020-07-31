@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamer.teapot.project.manager.dao.ProjectManagementDAO">
+
+    <!--分页查询-->
+    <select id="queryProjectList" parameterType="com.teamer.teapot.common.model.Project" resultType="com.teamer.teapot.common.model.Project">
+      select
+          projectId,
+          projectName,
+          createUser,
+          createTime
+       from t_project
+       <where>
+          <if test="projectName!=null and projectName!=''">
+              and  projectName like concat ('%',#{projectName},'%')
+          </if>
+       </where>
+     </select>
+
+    <!--新建项目-->
+    <insert id="createProject" parameterType="com.teamer.teapot.common.model.Project">
+        insert into t_project(
+        projectId,
+        projectName,
+        createUser
+        ) value (
+        #{projectId},
+        #{projectName},
+        #{createUser}
+        )
+    </insert>
+</mapper>

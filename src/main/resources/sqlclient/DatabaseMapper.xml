@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamer.teapot.datasource.manager.dao.DatabaseManagementDAO">
+
+    <!--分页查询-->
+    <select id="queryDatabaseList" parameterType="com.teamer.teapot.common.model.Database"
+            resultType="com.teamer.teapot.common.model.Database">
+        select
+        databaseName,
+        databaseId,
+        databaseConnection,
+        username,
+        password,
+        databaseType
+        from t_database
+        <where>
+            <if test="databaseName!=null and databaseName!=''">
+                and databaseName like concat ('%',#{databaseName},'%')
+            </if>
+        </where>
+    </select>
+
+    <!--新建项目-->
+    <insert id="addDatabase" parameterType="com.teamer.teapot.common.model.Database">
+        insert into t_database
+        (
+            databaseName,
+            databaseId,
+            databaseConnection,
+            username,
+            password,
+            databaseType
+        ) value (
+            #{databaseName},
+            #{databaseId},
+            #{databaseConnection},
+            #{username},
+            #{password},
+            #{databaseType}
+        )
+    </insert>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamer.teapot.project.database.dao.ProjectDBDAO">
+
+    <!--为项目关联数据库实例-->
+    <insert id="addProjectDatabaseInstance" parameterType="com.teamer.teapot.common.model.Project">
+        insert into
+        t_project_database_mapping(
+           projectId,
+           databaseId
+        ) value (
+           #{projectId},
+           #{databaseId}
+        )
+    </insert>
+
+    <select id="queryProjectDataBaseList" parameterType="com.teamer.teapot.common.model.Project"
+            resultType="com.teamer.teapot.common.model.ProjectDatabase">
+      select
+          projectDatabse.projectId,
+          projectDatabse.databaseId,
+          db.databaseName
+       from t_project_database_mapping projectDatabse
+       left join t_database db on db.databaseId = projectDatabse.databaseId
+       where projectId = #{projectId}
+     </select>
+
+</mapper>
