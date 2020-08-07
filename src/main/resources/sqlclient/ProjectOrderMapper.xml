@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamer.teapot.project.order.dao.ProjectOrderDAO">
+
+    <resultMap id="projectOrderDetails" type="com.teamer.teapot.common.model.ProjectOrder">
+        <result column="projectOrderId" jdbcType="VARCHAR" property="projectOrderId"/>
+        <result column="projectId" jdbcType="VARCHAR" property="projectId"/>
+        <result column="projectOrderName" jdbcType="VARCHAR" property="projectOrderName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="orderType" jdbcType="INTEGER" property="orderType"/>
+        <result column="orderState" jdbcType="INTEGER" property="orderState"/>
+        <result column="createUserId" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="createUser" jdbcType="VARCHAR" property="createUser"/>
+        <result column="createTime" jdbcType="DATE" property="createTime"/>
+        <collection property="tag" ofType="com.teamer.teapot.common.model.ProjectOrderTag" javaType="java.util.List">
+            <result column="tagId" jdbcType="VARCHAR" property="tagId"/>
+            <result column="orderTag" jdbcType="VARCHAR" property="orderTag"/>
+        </collection>
+    </resultMap>
+    <!--分页查询-->
+    <select id="queryProjectOrderList"
+            parameterType="com.teamer.teapot.common.model.ProjectOrder"
+            resultType="com.teamer.teapot.common.model.ProjectOrder">
+        select
+        projectOrderId,
+        projectId,
+        projectOrderName,
+        orderType,
+        orderState,
+        createUser,
+        createTime
+        from t_project_order
+        <where>
+            <if test="projectOrderName!=null and projectOrderName!=''">
+                and projectOrderName like concat ('%',#{projectOrderName},'%')
+            </if>
+        </where>
+    </select>
+
+    <!--查询详情-->
+    <select id="queryProjectOrderDetails"
+            parameterType="com.teamer.teapot.common.model.ProjectOrder"
+            resultMap="projectOrderDetails">
+        select
+           projectOrderId,
+           orders.projectId,
+           projectOrderName,
+           projectOrderDetail,
+           content,
+           orderType,
+           orderState,
+           createUserId,
+           createUser,
+           createTime,
+           projectOrderTag.tagId,
+           projectOrderTag.orderTag
+        from t_project_order orders
+        left join t_project_order_tag projectOrderTag on orders.projectId = projectOrderTag.projectId
+        where projectOrderId = #{projectOrderId}
+    </select>
+
+    <!--新建项目-->
+    <insert id="createProjectOrder" parameterType="com.teamer.teapot.common.model.ProjectOrder">
+        insert into t_project_order
+          (
+            projectOrderId,
+            projectId,
+            projectOrderName,
+            projectOrderDetail,
+            content,
+            orderType,
+            orderState,
+            createUserId,
+            createUser
+          ) value (
+            #{projectOrderId},
+            #{projectId},
+            #{projectOrderName},
+            #{projectOrderDetail},
+            #{content},
+            #{orderType},
+            #{orderState},
+            #{createUserId},
+            #{createUser}
+        )
+    </insert>
+
+    <insert id="insertProjectTags" parameterType="com.teamer.teapot.common.model.ProjectOrder">
+        insert into t_project_order_tag
+        (
+        tagId,
+        projectId,
+        orderTag
+        )
+        values
+        <foreach collection="tag" item="projectOrderTag" separator=",">
+            (
+            #{projectOrderTag.tagId},
+            #{projectOrderTag.projectId},
+            #{projectOrderTag.orderTag}
+            )
+        </foreach>
+    </insert>
+</mapper>
