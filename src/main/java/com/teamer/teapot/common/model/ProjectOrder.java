@@ -42,7 +42,7 @@ public class ProjectOrder {
     private List<ProjectOrderTag> tag;
     private String updateUser;
 
-    private enum OrderStateEnum {
+    public enum OrderStateEnum {
         /**
          * 未审核
          */

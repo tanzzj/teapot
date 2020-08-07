@@ -34,3 +34,7 @@ mybatis:
   type-aliases-package: com.teamer.teapot.commom.model
   configuration:
     jdbc-type-for-null: null
+
+logging:
+  level:
+    root: info

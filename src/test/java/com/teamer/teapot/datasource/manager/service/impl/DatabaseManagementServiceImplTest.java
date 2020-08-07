@@ -1,5 +1,6 @@
 package com.teamer.teapot.datasource.manager.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.teamer.teapot.common.model.Database;
 import com.teamer.teapot.common.model.PageParam;
 import com.teamer.teapot.common.util.TestUtil;
@@ -12,7 +13,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import java.sql.*;
 
 /**
  * @author : tanzj
@@ -48,6 +49,7 @@ public class DatabaseManagementServiceImplTest {
                                 .setPassword("tanzj")
                 )
         );
-
     }
+
+
 }

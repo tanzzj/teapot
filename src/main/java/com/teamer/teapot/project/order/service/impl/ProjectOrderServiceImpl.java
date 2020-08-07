@@ -71,6 +71,7 @@ public class ProjectOrderServiceImpl implements ProjectOrderService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Result createProjectOrder(ProjectOrder projectOrder) {
+        //todo 检测update语句
         projectOrder
                 .setProjectOrderId(UUIDFactory.getShortUUID())
                 .setOrderState(PENDING);
@@ -98,12 +99,16 @@ public class ProjectOrderServiceImpl implements ProjectOrderService {
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public Result examineProjectOrder(ProjectOrder projectOrder) {
-        int result = projectOrderDAO.updateProjectOrder(new ProjectOrder().setOrderState(projectOrder.getOrderState()));
+        int result = projectOrderDAO.updateProjectOrder(new ProjectOrder()
+                .setOrderState(projectOrder.getOrderState())
+                .setUpdateUser(projectOrder.getUpdateUser())
+                .setProjectOrderId(projectOrder.getProjectOrderId())
+        );
         if (result == 1) {
             return Result.success(new ProjectOrder().setProjectOrderId(projectOrder.getProjectOrderId()));
         } else {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            log.error("examineProjectOrder fail, reason is result error, result is:" + result);
+            log.error("examineProjectOrder fail, reason is result error, result is: " + result);
             return Result.fail("operation fail");
         }
     }
