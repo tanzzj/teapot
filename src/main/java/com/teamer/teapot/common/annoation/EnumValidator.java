@@ -1,18 +1,19 @@
 package com.teamer.teapot.common.annoation;
 
+import com.teamer.teapot.common.util.EnumValidatorHandler;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
 /**
- * @author :   chenhl
- * @date :     2019/12/24 0024 15:29
- * @description :
+ * @author :   tanzj
+ * @date :     2019/12/24 0024 15:29:
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
-//@Constraint(validatedBy = EnumValidatorHandler.class)
+@Constraint(validatedBy = EnumValidatorHandler.class)
 public @interface EnumValidator {
     Class<?> value();
 

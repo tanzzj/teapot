@@ -53,4 +53,19 @@ public class ProjectOrderController {
         projectOrder.setCreateUser(portalUser.getUsername()).setCreateUserId(portalUser.getUserId());
         return projectOrderService.createProjectOrder(projectOrder);
     }
+
+    @PostMapping("/queryProjectOrderAssignedToMe")
+    public Result queryProjectOrderAssignedToMe(@RequestBody ProjectOrder projectOrder, HttpServletRequest httpServletRequest) {
+        PortalUser portalUser = ContextUtil.getUserFromContext(httpServletRequest);
+        ValidationUtil.validateParamsBlankAndNull(projectOrder::getProjectId);
+        return null;
+    }
+
+    @PostMapping("/examineOrder")
+    public Result examineOrder(@RequestBody ProjectOrder projectOrder, HttpServletRequest httpServletRequest) {
+        ValidationUtil.validateParamsBlankAndNull(projectOrder::getProjectOrderId);
+        PortalUser portalUser = ContextUtil.getUserFromContext(httpServletRequest);
+        projectOrder.setUpdateUser(portalUser.getUsername());
+        return projectOrderService.examineProjectOrder(projectOrder);
+    }
 }

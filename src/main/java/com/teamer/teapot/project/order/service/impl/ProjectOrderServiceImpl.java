@@ -2,7 +2,6 @@ package com.teamer.teapot.project.order.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.teamer.teapot.common.model.PageParam;
-import com.teamer.teapot.common.model.Project;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.util.PageHelperUtil;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 import java.util.Optional;
@@ -83,5 +83,28 @@ public class ProjectOrderServiceImpl implements ProjectOrderService {
             projectOrderDAO.insertProjectTags(projectOrder);
         });
         return Result.success(new ProjectOrder().setProjectOrderId(projectOrder.getProjectOrderId()));
+    }
+
+    /**
+     * 审批工单
+     *
+     * @param projectOrder (
+     *                     projectId,
+     *                     orderState - 审核结果 ,
+     *                     examineOpinion - 审核意见 TBD
+     *                     )
+     * @return Result
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public Result examineProjectOrder(ProjectOrder projectOrder) {
+        int result = projectOrderDAO.updateProjectOrder(new ProjectOrder().setOrderState(projectOrder.getOrderState()));
+        if (result == 1) {
+            return Result.success(new ProjectOrder().setProjectOrderId(projectOrder.getProjectOrderId()));
+        } else {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            log.error("examineProjectOrder fail, reason is result error, result is:" + result);
+            return Result.fail("operation fail");
+        }
     }
 }

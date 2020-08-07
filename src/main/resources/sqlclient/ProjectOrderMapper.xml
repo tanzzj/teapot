@@ -85,6 +85,7 @@
         )
     </insert>
 
+    <!--插入工单标签-->
     <insert id="insertProjectTags" parameterType="com.teamer.teapot.common.model.ProjectOrder">
         insert into t_project_order_tag
         (
@@ -101,4 +102,20 @@
             )
         </foreach>
     </insert>
+
+    <!--更新项目工单-->
+    <update id="updateProjectOrder" parameterType="com.teamer.teapot.common.model.ProjectOrder">
+        update t_project_order  set
+        <if test="orderState!=null and orderState !=''">
+            orderState =  #{orderState},
+        </if>
+        <if test="content!=null and content !=''">
+            content = #{content},
+        </if>
+        <if test="projectOrderName !=null and projectOrderName !=''">
+            projectOrderName =  #{projectOrderName},
+        </if>
+        updateUser = #{updateUser}
+        where projectOrderId = #{projectOrderId}
+    </update>
 </mapper>

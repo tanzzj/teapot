@@ -1,8 +1,6 @@
 package com.teamer.teapot.project.order.dao;
 
-import com.teamer.teapot.common.model.Project;
 import com.teamer.teapot.common.model.ProjectOrder;
-import com.teamer.teapot.common.model.Result;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -40,13 +38,28 @@ public interface ProjectOrderDAO {
 
     /**
      * 创建工单tag
+     *
      * @param projectOrder (
      *                     projectId,
      *                     projectOrderId,
      *                     orderTag
      *                     )
-     * @return
+     * @return int
      */
     int insertProjectTags(ProjectOrder projectOrder);
+
+    /**
+     * 更新工单详情
+     *
+     * @param projectOrder (
+     *                     projectOrderId,
+     *                     projectOrderName,
+     *                     projectOrderDetail,
+     *                     content,
+     *                     orderState
+     *                     )
+     * @return int
+     */
+    int updateProjectOrder(ProjectOrder projectOrder);
 
 }

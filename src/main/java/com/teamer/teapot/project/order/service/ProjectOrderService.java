@@ -1,7 +1,6 @@
 package com.teamer.teapot.project.order.service;
 
 import com.teamer.teapot.common.model.PageParam;
-import com.teamer.teapot.common.model.Project;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
 
@@ -16,9 +15,9 @@ public interface ProjectOrderService {
      * 查询项目工单列表
      *
      * @param projectOrderPageParam (
-     *                         projectId-项目id
-     *                         projectOrderName-工单名称[可选] *
-     *                         )
+     *                              projectId-项目id
+     *                              projectOrderName-工单名称[可选] *
+     *                              )
      * @return Result
      */
     Result queryProjectOrderList(PageParam<ProjectOrder> projectOrderPageParam);
@@ -38,4 +37,16 @@ public interface ProjectOrderService {
      * @return Result
      */
     Result createProjectOrder(ProjectOrder projectOrder);
+
+    /**
+     * 审批工单
+     *
+     * @param projectOrder (
+     *                     projectId,
+     *                     orderState - 审核结果 ,
+     *                     examineOpinion - 审核意见 TBD
+     *                     )
+     * @return Result
+     */
+    Result examineProjectOrder(ProjectOrder projectOrder);
 }
