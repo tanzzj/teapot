@@ -1,15 +1,19 @@
 package com.teamer.teapot.project.order.controller;
 
 import com.teamer.teapot.common.model.PageParam;
+import com.teamer.teapot.common.model.PortalUser;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.project.order.service.ProjectOrderService;
+import com.teamer.teapot.rbac.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 项目工单
@@ -38,15 +42,15 @@ public class ProjectOrderController {
     }
 
     @PostMapping("/createProjectOrder")
-    public Result createProjectOrder(@RequestBody ProjectOrder projectOrder) {
+    public Result createProjectOrder(@RequestBody ProjectOrder projectOrder, HttpServletRequest httpServletRequest) {
+        PortalUser portalUser = ContextUtil.getUserFromContext(httpServletRequest);
         ValidationUtil.validateParamsBlankAndNull(
                 projectOrder::getProjectOrderName,
                 projectOrder::getProjectId,
                 projectOrder::getContent,
                 projectOrder::getOrderType
         );
-        /*测试情况*/
-        projectOrder.setCreateUser("tanzj").setCreateUserId("1");
+        projectOrder.setCreateUser(portalUser.getUsername()).setCreateUserId(portalUser.getUserId());
         return projectOrderService.createProjectOrder(projectOrder);
     }
 }

@@ -23,7 +23,7 @@ public class PortalUser implements Serializable {
 
     private String userId;
 
-    private String accountName;
+    private String username;
 
     private Integer userType;
 
@@ -42,5 +42,8 @@ public class PortalUser implements Serializable {
 
     public PortalUser(String userId) {
         this.userId = userId;
+    }
+
+    public PortalUser() {
     }
 }

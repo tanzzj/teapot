@@ -6,3 +6,4 @@ rbac:
   resource-list:
   - roleId: portalUser
     resource: /*
+  password-salt: DEFAULT

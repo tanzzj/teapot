@@ -35,6 +35,11 @@ public class RBACConfig implements InitializingBean {
     private List<String> permitList = new ArrayList<>();
 
     /**
+     * 密码盐
+     */
+    private String passwordSalt;
+
+    /**
      * 以permission为key,roleNameList为value的资源列表
      */
     private ConcurrentMap<String, List<RBACRole>> resourceMap = new ConcurrentHashMap<>();

@@ -50,7 +50,7 @@ public class ProjectManagementController {
     @PostMapping("/createProject")
     public Result createProject(@RequestBody Project projectParams, HttpServletRequest request) {
         ValidationUtil.validateParamsBlankAndNull(projectParams::getProjectName);
-//        projectParams.setCreateUser(ContextUtil.getUserFromContext(request).getAccountName());
+//        projectParams.setCreateUser(ContextUtil.getUserFromContext(request).getUsername());
         projectParams.setCreateUser("tanzj");
         return projectManagementService.createProject(projectParams);
     }
