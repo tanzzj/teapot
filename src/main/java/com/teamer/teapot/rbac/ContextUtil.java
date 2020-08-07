@@ -13,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class ContextUtil {
 
+    public static final String USER_PREFIX = "user";
+
     public static PortalUser getUserFromContext(HttpServletRequest request) {
-        Object user = request.getSession().getAttribute("user");
+        Object user = request.getSession().getAttribute(USER_PREFIX);
         if (user instanceof PortalUser) {
             return (PortalUser) user;
         } else {

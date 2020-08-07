@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProjectDBController {
 
     @Autowired
-    ProjectDBService projectDBService;
+    private ProjectDBService projectDBService;
 
     /**
      * add a project related database instance
