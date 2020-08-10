@@ -3,6 +3,7 @@ package com.teamer.teapot.project.database.service;
 import com.teamer.teapot.common.model.Project;
 import com.teamer.teapot.common.model.ProjectDatabase;
 import com.teamer.teapot.common.model.Result;
+import com.teamer.teapot.common.model.SQLParams;
 
 import java.util.List;
 
@@ -30,5 +31,15 @@ public interface ProjectDBService {
      * @return List<ProjectDatabase>
      */
     Result queryProjectDataBaseList(Project project);
+
+    /**
+     * 执行目标db脚本
+     * @param sqlParams (
+     *                  sql,
+     *                  databaseId
+     *                  )
+     * @return Result
+     */
+    Result executeSQL(SQLParams sqlParams) throws ClassNotFoundException;
 
 }

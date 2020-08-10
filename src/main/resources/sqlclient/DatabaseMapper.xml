@@ -39,4 +39,16 @@
             #{databaseType}
         )
     </insert>
+
+    <select id="queryDatabaseDetail" parameterType="com.teamer.teapot.common.model.Database" resultType="com.teamer.teapot.common.model.Database">
+        select
+            databaseName,
+            databaseId,
+            databaseConnection,
+            username,
+            password,
+            databaseType
+        from t_database
+        where databaseId = #{databaseId}
+    </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.teamer.teapot.project.database.controller;
 import com.teamer.teapot.common.model.Project;
 import com.teamer.teapot.common.model.ProjectDatabase;
 import com.teamer.teapot.common.model.Result;
+import com.teamer.teapot.common.model.SQLParams;
 import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.project.database.service.ProjectDBService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,15 @@ public class ProjectDBController {
         ValidationUtil.validateParamsBlankAndNull(project::getProjectId);
         return projectDBService.queryProjectDataBaseList(project);
     }
+
+    @PostMapping("/executeSQL")
+    public Result executeSQL(@RequestBody SQLParams sqlParams) throws ClassNotFoundException {
+        ValidationUtil.validateParamsBlankAndNull(
+                sqlParams::getSql,
+                sqlParams::getDatabaseId
+        );
+        return projectDBService.executeSQL(sqlParams);
+    }
+
 
 }

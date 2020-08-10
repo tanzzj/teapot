@@ -14,16 +14,26 @@ public interface DatabaseManagementDAO {
 
     /**
      * query database instances list
+     *
      * @param database (databaseName - optional)
-     * @return  List<Database>
+     * @return List<Database>
      */
     List<Database> queryDatabaseList(Database database);
 
     /**
      * add database
+     *
      * @param database instance
      * @return int
      */
     int addDatabase(Database database);
+
+    /**
+     * 查询database详情
+     *
+     * @param database (databaseId)
+     * @return Database
+     */
+    Database queryDatabaseDetail(Database database);
 
 }
