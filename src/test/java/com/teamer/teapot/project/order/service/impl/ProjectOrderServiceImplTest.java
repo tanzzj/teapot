@@ -4,6 +4,7 @@ import com.teamer.teapot.common.model.PageParam;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.ProjectOrderTag;
 import com.teamer.teapot.common.model.Result;
+import com.teamer.teapot.common.model.dto.MergeOrderParams;
 import com.teamer.teapot.common.util.TestUtil;
 import com.teamer.teapot.project.order.service.ProjectOrderService;
 import org.junit.Test;
@@ -109,7 +110,21 @@ public class ProjectOrderServiceImplTest {
         TestUtil.assertFail(
                 projectOrderService.examineProjectOrder(new ProjectOrder().setOrderState(ProjectOrder.OrderStateEnum.PASS.getValue()))
         );
+    }
 
-
+    @Test
+    public void mergeOrderTest(){
+        TestUtil.assertSuccess(
+                projectOrderService.mergeOrder(
+                        new MergeOrderParams()
+                        .setProjectId("1")
+                        .setProjectOrderList(new ArrayList<ProjectOrder>(){{
+                            add(new ProjectOrder().setProjectOrderId("2pNDetut"));
+                            add(new ProjectOrder().setProjectOrderId("COYcNlRz"));
+                            add(new ProjectOrder().setProjectOrderId("98yayNew"));
+                            add(new ProjectOrder().setProjectOrderId("slS9vYJL"));
+                        }})
+                )
+        );
     }
 }

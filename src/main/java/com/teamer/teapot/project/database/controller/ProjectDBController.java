@@ -53,6 +53,16 @@ public class ProjectDBController {
         return projectDBService.queryProjectDataBaseList(project);
     }
 
+    /**
+     * 暂时只支持查询
+     *
+     * @param sqlParams (
+     *                  sql,
+     *                  databaseId
+     *                  )
+     * @return Result
+     * @throws ClassNotFoundException 找不到类异常
+     */
     @PostMapping("/executeSQL")
     public Result executeSQL(@RequestBody SQLParams sqlParams) throws ClassNotFoundException {
         ValidationUtil.validateParamsBlankAndNull(

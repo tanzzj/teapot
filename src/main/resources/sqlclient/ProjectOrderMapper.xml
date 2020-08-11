@@ -120,4 +120,22 @@
         </set>
         where projectOrderId = #{projectOrderId}
     </update>
+
+    <select id="queryOrderListByOrderIdList"
+            parameterType="com.teamer.teapot.common.model.dto.MergeOrderParams"
+            resultType="com.teamer.teapot.common.model.ProjectOrder">
+        select
+         projectOrderName,
+         content,
+         orderType,
+         orderState
+        from t_project_order
+        where
+        projectId = #{projectId}
+        and
+        projectOrderId in
+        <foreach collection="projectOrderList" item="projectOrder" open="(" close=")" separator=",">
+            #{projectOrder.projectOrderId}
+        </foreach>
+    </select>
 </mapper>

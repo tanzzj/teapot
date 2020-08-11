@@ -3,6 +3,7 @@ package com.teamer.teapot.project.order.service;
 import com.teamer.teapot.common.model.PageParam;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
+import com.teamer.teapot.common.model.dto.MergeOrderParams;
 
 /**
  * @author : tanzj
@@ -49,4 +50,15 @@ public interface ProjectOrderService {
      * @return Result
      */
     Result examineProjectOrder(ProjectOrder projectOrder);
+
+    /**
+     * 合并查询工单
+     *
+     * @param mergeOrderParams (
+     *                         projectId,
+     *                         projectOrderIdList
+     *                         )
+     * @return Result
+     */
+    Result mergeOrder(MergeOrderParams mergeOrderParams);
 }

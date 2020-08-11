@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.teamer.teapot.common.model.PageParam;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
+import com.teamer.teapot.common.model.dto.MergeOrderParams;
 import com.teamer.teapot.common.util.PageHelperUtil;
 import com.teamer.teapot.common.util.UUIDFactory;
 import com.teamer.teapot.project.order.dao.ProjectOrderDAO;
@@ -111,5 +112,20 @@ public class ProjectOrderServiceImpl implements ProjectOrderService {
             log.error("examineProjectOrder fail, reason is result error, result is: " + result);
             return Result.fail("operation fail");
         }
+    }
+
+    /**
+     * 合并查询工单
+     *
+     * @param mergeOrderParams (
+     *                         projectId,
+     *                         projectOrderIdList
+     *                         )
+     * @return Result
+     */
+    @Override
+    public Result mergeOrder(MergeOrderParams mergeOrderParams) {
+        List<ProjectOrder> projectOrderList = projectOrderDAO.queryOrderListByOrderIdList(mergeOrderParams);
+        return Result.success(projectOrderList);
     }
 }

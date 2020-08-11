@@ -1,6 +1,5 @@
 package com.teamer.teapot.project.database.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.teamer.teapot.common.model.*;
 import com.teamer.teapot.common.model.vo.DatabaseQueryVO;
 import com.teamer.teapot.common.util.UUIDFactory;
@@ -82,22 +81,28 @@ public class ProjectDBServiceImpl implements ProjectDBService {
                 );
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sqlParams.getSql());
-                //取得sql执行表信息
-                Object resultSetMetaData = resultSet.getMetaData().unwrap(Object.class);
+                int columnCount = resultSet.getMetaData().getColumnCount();
+
                 //具体数据信息列表
                 List<List> resultList = new ArrayList<>();
-                int columnCount = resultSet.getMetaData().getColumnCount();
+                List<MetaData> metaDataList = new ArrayList<>();
                 while (resultSet.next()) {
                     //行记录
                     List<Object> resultListScope = new ArrayList<>();
                     for (int i = 0; i < columnCount; i++) {
                         resultListScope.add(resultSet.getObject(i + 1));
+                        //取得sql执行表信息
+                        ResultSetMetaData meta = resultSet.getMetaData();
+                        MetaData metaData = new MetaData()
+                                .setName(resultSet.getMetaData().getColumnName(i + 1))
+                                .setMysqlType(meta.getColumnType(i + 1));
+                        metaDataList.add(metaData);
                     }
                     resultList.add(resultListScope);
                 }
                 return Result.success(
                         new DatabaseQueryVO()
-                                .setMetaData(resultSetMetaData)
+                                .setMetaData(metaDataList)
                                 .setDataList(resultList)
                 );
             } catch (SQLException e) {

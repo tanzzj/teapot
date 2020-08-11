@@ -4,10 +4,12 @@ import com.teamer.teapot.common.model.PageParam;
 import com.teamer.teapot.common.model.PortalUser;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
+import com.teamer.teapot.common.model.dto.MergeOrderParams;
 import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.project.order.service.ProjectOrderService;
 import com.teamer.teapot.rbac.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,5 +69,14 @@ public class ProjectOrderController {
         PortalUser portalUser = ContextUtil.getUserFromContext(httpServletRequest);
         projectOrder.setUpdateUser(portalUser.getUsername());
         return projectOrderService.examineProjectOrder(projectOrder);
+    }
+
+    @PostMapping("/mergeOrder")
+    public Result mergeOrder(@RequestBody MergeOrderParams mergeOrderParams) {
+        ValidationUtil.validateParamsBlankAndNull(mergeOrderParams::getProjectId);
+        if (CollectionUtils.isEmpty(mergeOrderParams.getProjectOrderList())) {
+            return Result.fail("orderList cannot be null");
+        }
+        return projectOrderService.mergeOrder(mergeOrderParams);
     }
 }

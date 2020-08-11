@@ -1,6 +1,7 @@
 package com.teamer.teapot.project.order.dao;
 
 import com.teamer.teapot.common.model.ProjectOrder;
+import com.teamer.teapot.common.model.dto.MergeOrderParams;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -61,5 +62,16 @@ public interface ProjectOrderDAO {
      * @return int
      */
     int updateProjectOrder(ProjectOrder projectOrder);
+
+    /**
+     * 批量查询工单信息
+     *
+     * @param mergeOrderParams (
+     *                         projectId,
+     *                         projectOrderIdList
+     *                         )
+     * @return List<ProjectOrder>
+     */
+    List<ProjectOrder> queryOrderListByOrderIdList(MergeOrderParams mergeOrderParams);
 
 }

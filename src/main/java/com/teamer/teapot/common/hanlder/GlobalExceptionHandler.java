@@ -3,6 +3,7 @@ package com.teamer.teapot.common.hanlder;
 import com.teamer.teapot.common.exception.ValidationException;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.rbac.ContextUserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author ：luje
  * @date ：Created in 2019/12/25 10:30
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     /**
@@ -32,7 +33,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ContextUserNotFoundException.class)
     public Result contextUserNotFoundException(ContextUserNotFoundException e) {
-        logger.debug("无法从上下文获取到用户" + e);
+        log.debug("无法从上下文获取到用户" + e);
         return Result.fail(e.getMessage(), "401");
     }
 
@@ -45,7 +46,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result paramValidationException(MethodArgumentNotValidException e) {
-        logger.error("参数校验失败", e);
+        log.error("参数校验失败", e);
         BindingResult result = e.getBindingResult();
         FieldError error = result.getFieldError();
         if (error == null) {
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ValidationException.class)
     public Result validationException(ValidationException e) {
-        logger.error("参数为空，{}", e.getMessage());
+        log.error("参数为空，{}", e.getMessage());
         return Result.fail(e.getMessage());
     }
 
@@ -76,7 +77,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        logger.error("参数校验失败", e);
+        log.error("参数校验失败", e);
         return Result.fail("参数类型错误");
     }
 
@@ -89,7 +90,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result exception(Exception e) {
-        logger.error("出现异常", e);
+        log.error("出现异常", e);
         return Result.fail("服务异常");
     }
 
