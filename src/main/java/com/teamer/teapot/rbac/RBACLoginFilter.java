@@ -13,10 +13,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -27,13 +24,14 @@ import static com.teamer.teapot.rbac.ContextUtil.USER_PREFIX;
  * @date : 2020/8/7.
  */
 @Component
-@WebFilter(urlPatterns = "/login")
+@WebFilter(urlPatterns = "/api/login")
 public class RBACLoginFilter implements Filter {
 
     @Autowired
     private UserDAO userDAO;
     @Autowired
     RBACConfig rbacConfig;
+    private static final String LOGIN_PATH = "/api/login";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -42,48 +40,65 @@ public class RBACLoginFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-
-        if (httpServletRequest.getSession().getAttribute(USER_PREFIX) != null) {
-            filterChain.doFilter(servletRequest, servletResponse);
-        } else {
-            BufferedReader streamReader = null;
-            streamReader = new BufferedReader(new InputStreamReader(httpServletRequest.getInputStream(), StandardCharsets.UTF_8));
-            StringBuilder stringBuilder = new StringBuilder();
-
-            String inputStr;
-            while ((inputStr = streamReader.readLine()) != null) {
-                stringBuilder.append(inputStr);
-            }
-            PortalUser user = JSON.toJavaObject(JSON.parseObject(stringBuilder.toString()), PortalUser.class);
-            String username = Optional.ofNullable(user.getUsername()).orElseThrow(ContextUserNotFoundException::new);
-            String password = MD5Util.encode(
-                    Optional.ofNullable(user.getPassword()).orElseThrow(ContextUserNotFoundException::new), rbacConfig.getPasswordSalt()
-            );
-            PortalUser portalUser = userDAO.queryPortalUser(new PortalUser().setUsername(username));
-            if (portalUser != null && portalUser.getPassword().equals(password)) {
-                httpServletRequest.getSession().setAttribute(USER_PREFIX, portalUser);
-                servletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-                servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
-                ((HttpServletResponse) servletResponse).setStatus(HttpStatus.OK.value());
-                try (PrintWriter out = servletResponse.getWriter()) {
-                    out.write(JSON.toJSONString(Result.successWithoutData("登录成功")));
-                    out.flush();
-                }
+        if (LOGIN_PATH.equals(httpServletRequest.getRequestURI())) {
+            if (httpServletRequest.getSession().getAttribute(USER_PREFIX) != null && !LOGIN_PATH.equals(httpServletRequest.getRequestURI())) {
+                filterChain.doFilter(servletRequest, servletResponse);
             } else {
-                servletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-                servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
-                ((HttpServletResponse) servletResponse).setStatus(HttpStatus.OK.value());
-                try (PrintWriter out = servletResponse.getWriter()) {
-                    out.write(JSON.toJSONString(Result.fail("账号名或密码错误", "401")));
-                    out.flush();
+                String requestData = this.readInputStream(httpServletRequest.getInputStream());
+                PortalUser user = JSON.toJavaObject(JSON.parseObject(requestData), PortalUser.class);
+                String username = Optional.ofNullable(user.getUsername()).orElseThrow(ContextUserNotFoundException::new);
+                String password = MD5Util.encode(
+                        Optional.ofNullable(user.getPassword()).orElseThrow(ContextUserNotFoundException::new), rbacConfig.getPasswordSalt()
+                );
+                PortalUser portalUser = userDAO.queryPortalUser(new PortalUser().setUsername(username));
+                if (portalUser != null && portalUser.getPassword().equals(password)) {
+                    httpServletRequest.getSession().setAttribute(USER_PREFIX, portalUser);
+                    servletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+                    servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                    ((HttpServletResponse) servletResponse).setStatus(HttpStatus.OK.value());
+                    try (PrintWriter out = servletResponse.getWriter()) {
+                        out.write(JSON.toJSONString(Result.successWithoutData("登录成功")));
+                        out.flush();
+                    }
+                } else {
+                    servletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+                    servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                    ((HttpServletResponse) servletResponse).setStatus(HttpStatus.OK.value());
+                    try (PrintWriter out = servletResponse.getWriter()) {
+                        out.write(JSON.toJSONString(Result.fail("账号名或密码错误", "401")));
+                        out.flush();
+                    }
                 }
             }
+        } else {
+            filterChain.doFilter(servletRequest, servletResponse);
         }
+
     }
 
     @Override
     public void destroy() {
 
+    }
+
+    /**
+     * 读取inputStream
+     *
+     * @param inputStream 输入流
+     * @return String
+     * @throws IOException io异常
+     */
+    private String readInputStream(InputStream inputStream) throws IOException {
+        BufferedReader streamReader = null;
+        streamReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String inputStr;
+        while ((inputStr = streamReader.readLine()) != null) {
+            stringBuilder.append(inputStr);
+        }
+        return stringBuilder.toString();
     }
 }
