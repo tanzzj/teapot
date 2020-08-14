@@ -69,7 +69,7 @@ public class RBACFilter implements Filter, InitializingBean {
             servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
             ((HttpServletResponse) servletResponse).setStatus(HttpStatus.OK.value());
             try (PrintWriter out = servletResponse.getWriter()) {
-                out.write(JSON.toJSONString(Result.fail("无此权限", "500")));
+                out.write(JSON.toJSONString(Result.fail("无此权限", "403")));
                 out.flush();
             }
         }

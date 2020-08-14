@@ -1,5 +1,8 @@
 package com.teamer.teapot.project.database.service.impl;
 
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.teamer.teapot.common.model.*;
 import com.teamer.teapot.common.model.vo.DatabaseQueryVO;
 import com.teamer.teapot.common.util.UUIDFactory;
@@ -71,7 +74,7 @@ public class ProjectDBServiceImpl implements ProjectDBService {
         Database database = databaseManagementDAO.queryDatabaseDetail(new Database().setDatabaseId(sqlParams.getDatabaseId()));
         if (database != null) {
             //现在仅支持mysql
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             try {
                 //获取mysql连接
                 Connection connection = DriverManager.getConnection(
@@ -80,31 +83,38 @@ public class ProjectDBServiceImpl implements ProjectDBService {
                         database.getPassword()
                 );
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(sqlParams.getSql());
-                int columnCount = resultSet.getMetaData().getColumnCount();
-
-                //具体数据信息列表
-                List<List> resultList = new ArrayList<>();
-                List<MetaData> metaDataList = new ArrayList<>();
-                while (resultSet.next()) {
-                    //行记录
-                    List<Object> resultListScope = new ArrayList<>();
-                    for (int i = 0; i < columnCount; i++) {
-                        resultListScope.add(resultSet.getObject(i + 1));
-                        //取得sql执行表信息
-                        ResultSetMetaData meta = resultSet.getMetaData();
-                        MetaData metaData = new MetaData()
-                                .setName(resultSet.getMetaData().getColumnName(i + 1))
-                                .setMysqlType(meta.getColumnType(i + 1));
-                        metaDataList.add(metaData);
+                List<SQLStatement> sqlStatementList = SQLUtils.parseStatements(sqlParams.getSql(), "mysql");
+                //查询
+                if (sqlStatementList.get(0) instanceof SQLSelectStatement) {
+                    ResultSet resultSet = statement.executeQuery(sqlParams.getSql());
+                    int columnCount = resultSet.getMetaData().getColumnCount();
+                    //具体数据信息列表
+                    List<List> resultList = new ArrayList<>();
+                    List<MetaData> metaDataList = new ArrayList<>();
+                    while (resultSet.next()) {
+                        //行记录
+                        List<Object> resultListScope = new ArrayList<>();
+                        for (int i = 0; i < columnCount; i++) {
+                            resultListScope.add(resultSet.getObject(i + 1));
+                            //取得sql执行表信息
+                            ResultSetMetaData meta = resultSet.getMetaData();
+                            MetaData metaData = new MetaData()
+                                    .setName(resultSet.getMetaData().getColumnName(i + 1))
+                                    .setMysqlType(meta.getColumnType(i + 1));
+                            metaDataList.add(metaData);
+                        }
+                        resultList.add(resultListScope);
                     }
-                    resultList.add(resultListScope);
+                    return Result.success(
+                            new DatabaseQueryVO()
+                                    .setMetaData(metaDataList)
+                                    .setDataList(resultList)
+                    );
+                } else {
+                    statement.execute(sqlParams.getSql());
+                    return Result.success("ok");
                 }
-                return Result.success(
-                        new DatabaseQueryVO()
-                                .setMetaData(metaDataList)
-                                .setDataList(resultList)
-                );
+
             } catch (SQLException e) {
                 log.error("获取连接失败", e);
                 return Result.fail("database connection fail ,please check your username,password,and database connection config is correct");

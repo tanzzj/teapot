@@ -46,6 +46,8 @@ public class ProjectDBServiceImplTest {
     }
 
     @Test
+    @Rollback
+    @Transactional
     public void executeSQL() throws ClassNotFoundException {
         TestUtil.assertSuccess(
                 projectDBService.executeSQL(
@@ -54,6 +56,15 @@ public class ProjectDBServiceImplTest {
                                 .setDatabaseId("2m2Htxgs")
                 )
         );
+
+        TestUtil.assertSuccess(
+                projectDBService.executeSQL(
+                        new SQLParams()
+                                .setSql("update t_project set projectName = '666' where projectId = 'DL7ulWzq'")
+                                .setDatabaseId("2m2Htxgs")
+                )
+        );
+
         TestUtil.assertFail(
                 projectDBService.executeSQL(
                         new SQLParams()
