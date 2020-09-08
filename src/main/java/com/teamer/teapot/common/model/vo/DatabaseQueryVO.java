@@ -1,6 +1,5 @@
 package com.teamer.teapot.common.model.vo;
 
-import com.teamer.teapot.common.model.MetaData;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,7 +11,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class DatabaseQueryVO {
+public class DatabaseQueryVO extends AbstractDatabaseExecuteVO {
 
     Object metaData;
     List<List> dataList;

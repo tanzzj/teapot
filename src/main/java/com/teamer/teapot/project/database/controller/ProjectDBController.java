@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
+
 /**
  * @author : tanzj
  * @date : 2020/7/31.
@@ -64,7 +66,7 @@ public class ProjectDBController {
      * @throws ClassNotFoundException 找不到类异常
      */
     @PostMapping("/executeSQL")
-    public Result executeSQL(@RequestBody SQLParams sqlParams) throws ClassNotFoundException {
+    public Result executeSQL(@RequestBody SQLParams sqlParams) throws ClassNotFoundException, SQLException {
         ValidationUtil.validateParamsBlankAndNull(
                 sqlParams::getSql,
                 sqlParams::getDatabaseId

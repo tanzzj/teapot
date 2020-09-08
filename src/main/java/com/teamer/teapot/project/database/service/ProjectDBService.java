@@ -5,6 +5,7 @@ import com.teamer.teapot.common.model.ProjectDatabase;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.model.SQLParams;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -40,6 +41,6 @@ public interface ProjectDBService {
      *                  )
      * @return Result
      */
-    Result executeSQL(SQLParams sqlParams) throws ClassNotFoundException;
+    Result executeSQL(SQLParams sqlParams) throws ClassNotFoundException, SQLException;
 
 }

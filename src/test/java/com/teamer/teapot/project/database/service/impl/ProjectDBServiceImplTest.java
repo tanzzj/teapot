@@ -13,6 +13,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
+
 /**
  * @author : tanzj
  * @date : 2020/7/31.
@@ -48,7 +50,7 @@ public class ProjectDBServiceImplTest {
     @Test
     @Rollback
     @Transactional
-    public void executeSQL() throws ClassNotFoundException {
+    public void executeSQL() throws ClassNotFoundException, SQLException {
         TestUtil.assertSuccess(
                 projectDBService.executeSQL(
                         new SQLParams()
