@@ -16,8 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author : tanzj
@@ -87,19 +86,23 @@ public class ProjectDBServiceImpl implements ProjectDBService {
                 Statement statement = connection.createStatement();
                 //将sql string 取出 分析成多sqlList
                 List<SQLStatement> sqlStatementList = SQLUtils.parseStatements(sqlParams.getSql(), "mysql");
+                //分别执行
                 for (SQLStatement sqlStatement : sqlStatementList) {
                     try {
                         if (sqlStatement instanceof SQLSelectStatement) {
                             ResultSet resultSet = statement.executeQuery(sqlStatement.toLowerCaseString());
+                            //取得记录的行数
                             int columnCount = resultSet.getMetaData().getColumnCount();
                             //具体数据信息列表
-                            List<List> resultList = new ArrayList<>();
-                            List<MetaData> metaDataList = new ArrayList<>();
+                            List<Map> resultList = new ArrayList<>();
+                            //表元信息
+                            Set<MetaData> metaDataList = new HashSet<>();
                             while (resultSet.next()) {
                                 //行记录
-                                List<Object> resultListScope = new ArrayList<>();
+                                Map<String, Object> hashMap = new HashMap<>();
                                 for (int i = 0; i < columnCount; i++) {
-                                    resultListScope.add(resultSet.getObject(i + 1));
+                                    //key,value的形式存储查询结果
+                                    hashMap.put(resultSet.getMetaData().getColumnName(i + 1), resultSet.getObject(i + 1));
                                     //取得sql执行表信息
                                     ResultSetMetaData meta = resultSet.getMetaData();
                                     MetaData metaData = new MetaData()
@@ -107,16 +110,17 @@ public class ProjectDBServiceImpl implements ProjectDBService {
                                             .setMysqlType(meta.getColumnType(i + 1));
                                     metaDataList.add(metaData);
                                 }
-                                resultList.add(resultListScope);
+                                resultList.add(hashMap);
                             }
                             responseList.add(
                                     new DatabaseQueryVO()
                                             .setMetaData(metaDataList)
                                             .setDataList(resultList)
+                                            .setSqlType("select")
                             );
                         } else {
                             statement.execute(sqlStatement.toLowerCaseString());
-                            responseList.add(new DatabaseDMLVO().setResult("ok"));
+                            responseList.add(new DatabaseDMLVO().setResult("ok").setSqlType("dml"));
                         }
                     } catch (SQLException e) {
                         log.error("获取连接失败", e);

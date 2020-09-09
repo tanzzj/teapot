@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : tanzj
@@ -14,6 +15,6 @@ import java.util.List;
 public class DatabaseQueryVO extends AbstractDatabaseExecuteVO {
 
     Object metaData;
-    List<List> dataList;
+    List<Map> dataList;
 
 }
