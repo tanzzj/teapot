@@ -10,4 +10,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public abstract class AbstractDatabaseExecuteVO {
     private String sqlType;
+    private String result;
+    private String message;
 }

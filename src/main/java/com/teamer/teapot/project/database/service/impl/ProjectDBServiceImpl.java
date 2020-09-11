@@ -99,10 +99,10 @@ public class ProjectDBServiceImpl implements ProjectDBService {
                             Set<MetaData> metaDataList = new HashSet<>();
                             while (resultSet.next()) {
                                 //行记录
-                                Map<String, Object> hashMap = new HashMap<>();
+                                Map<String, Object> dataMap = new LinkedHashMap<>();
                                 for (int i = 0; i < columnCount; i++) {
                                     //key,value的形式存储查询结果
-                                    hashMap.put(resultSet.getMetaData().getColumnName(i + 1), resultSet.getObject(i + 1));
+                                    dataMap.put(resultSet.getMetaData().getColumnName(i + 1), resultSet.getObject(i + 1));
                                     //取得sql执行表信息
                                     ResultSetMetaData meta = resultSet.getMetaData();
                                     MetaData metaData = new MetaData()
@@ -110,25 +110,30 @@ public class ProjectDBServiceImpl implements ProjectDBService {
                                             .setMysqlType(meta.getColumnType(i + 1));
                                     metaDataList.add(metaData);
                                 }
-                                resultList.add(hashMap);
+                                resultList.add(dataMap);
                             }
                             responseList.add(
                                     new DatabaseQueryVO()
                                             .setMetaData(metaDataList)
                                             .setDataList(resultList)
                                             .setSqlType("select")
+                                            .setResult("ok")
                             );
                         } else {
                             statement.execute(sqlStatement.toLowerCaseString());
                             responseList.add(new DatabaseDMLVO().setResult("ok").setSqlType("dml"));
                         }
                     } catch (SQLException e) {
-                        log.error("获取连接失败", e);
-                        responseList.add(new DatabaseDMLVO().setResult("error" + e.getMessage()));
+                        log.error("sql exception", e);
+                        responseList.add(
+                                new DatabaseDMLVO()
+                                        .setResult("error")
+                                        .setMessage("error:" + e.getMessage())
+                        );
                     }
                 }
             }
-            return Result.success("success", responseList);
+            return Result.success(responseList);
         } else {
             return Result.fail("database not exist");
         }
