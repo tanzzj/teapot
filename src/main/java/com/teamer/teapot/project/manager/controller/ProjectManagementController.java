@@ -54,6 +54,4 @@ public class ProjectManagementController {
         projectParams.setCreateUser("tanzj");
         return projectManagementService.createProject(projectParams);
     }
-
-    ;
 }

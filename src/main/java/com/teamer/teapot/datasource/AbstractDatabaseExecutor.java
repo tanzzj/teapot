@@ -7,5 +7,4 @@ package com.teamer.teapot.datasource;
 public abstract class AbstractDatabaseExecutor {
 
 
-
 }

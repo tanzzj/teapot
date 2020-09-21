@@ -3,6 +3,8 @@ package com.teamer.teapot.project.database.service.impl;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
+import com.alibaba.druid.sql.ast.statement.SQLShowTablesStatement;
+import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlShowStatement;
 import com.teamer.teapot.common.model.*;
 import com.teamer.teapot.common.model.vo.AbstractDatabaseExecuteVO;
 import com.teamer.teapot.common.model.vo.DatabaseDMLVO;
@@ -89,7 +91,10 @@ public class ProjectDBServiceImpl implements ProjectDBService {
                 //分别执行
                 for (SQLStatement sqlStatement : sqlStatementList) {
                     try {
-                        if (sqlStatement instanceof SQLSelectStatement) {
+                        if (sqlStatement instanceof SQLSelectStatement ||
+                                sqlStatement instanceof SQLShowTablesStatement ||
+                                sqlStatement instanceof MySqlShowStatement
+                        ) {
                             ResultSet resultSet = statement.executeQuery(sqlStatement.toLowerCaseString());
                             //取得记录的行数
                             int columnCount = resultSet.getMetaData().getColumnCount();
