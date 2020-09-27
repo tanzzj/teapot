@@ -15,6 +15,7 @@
         <dependency>
             <groupId>com.teamer</groupId>
             <artifactId>teapot-common</artifactId>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 
