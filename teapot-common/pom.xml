@@ -11,5 +11,8 @@
 
     <artifactId>teapot-common</artifactId>
 
+    <dependencies>
+
+    </dependencies>
 
 </project>

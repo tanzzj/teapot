@@ -1,7 +1,6 @@
 package com.teamer.teapot.rbac;
 
 import com.alibaba.fastjson.JSON;
-import com.teamer.teapot.common.model.PortalUser;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.util.ValidationUtil;
 import lombok.extern.slf4j.Slf4j;

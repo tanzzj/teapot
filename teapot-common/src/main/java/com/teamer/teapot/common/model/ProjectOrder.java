@@ -37,8 +37,8 @@ public class ProjectOrder {
     private String createUserId;
     private String createUser;
     private Date createTime;
-    @FieldName(value = "指定审核人", comment = "传入userId")
-    private List<PortalUser> assignedUserList;
+//    @FieldName(value = "指定审核人", comment = "传入userId")
+//    private List<PortalUser> assignedUserList;
     private List<ProjectOrderTag> tag;
     private String updateUser;
 

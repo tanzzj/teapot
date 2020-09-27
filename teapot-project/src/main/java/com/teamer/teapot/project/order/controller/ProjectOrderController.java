@@ -1,7 +1,7 @@
 package com.teamer.teapot.project.order.controller;
 
 import com.teamer.teapot.common.model.PageParam;
-import com.teamer.teapot.common.model.PortalUser;
+import com.teamer.teapot.rbac.PortalUser;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.model.dto.MergeOrderParams;

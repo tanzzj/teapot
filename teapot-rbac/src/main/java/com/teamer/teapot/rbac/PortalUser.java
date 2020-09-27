@@ -1,7 +1,6 @@
-package com.teamer.teapot.common.model;
+package com.teamer.teapot.rbac;
 
 
-import com.teamer.teapot.rbac.RBACRole;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

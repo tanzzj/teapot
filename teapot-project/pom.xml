@@ -16,12 +16,17 @@
         <dependency>
             <groupId>com.teamer</groupId>
             <artifactId>teapot-common</artifactId>
-            <version>0.0.1</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.teamer</groupId>
             <artifactId>teapot-rbac</artifactId>
-            <version>0.0.1</version>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.teamer</groupId>
+            <artifactId>teapot-datasource</artifactId>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 </project>

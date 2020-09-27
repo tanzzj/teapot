@@ -1,6 +1,5 @@
 package com.teamer.teapot.rbac;
 
-import com.teamer.teapot.common.model.PortalUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
