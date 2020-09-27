@@ -12,6 +12,7 @@
         <module>teapot-configuration</module>
         <module>teapot-project</module>
         <module>teapot-all</module>
+        <module>teapot-test</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -90,13 +91,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+
 
 </project>

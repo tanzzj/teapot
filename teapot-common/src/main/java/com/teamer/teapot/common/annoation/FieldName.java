@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldName {
-	public String value();
-	public String comment() default "";
+    String value();
+
+    String comment() default "";
 }

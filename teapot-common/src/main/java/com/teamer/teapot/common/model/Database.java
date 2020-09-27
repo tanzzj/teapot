@@ -11,10 +11,28 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Database {
     private Integer id;
+    /**
+     * 数据库id
+     */
     private String databaseId;
+    /**
+     * 数据库名（自定义名称）
+     */
     private String databaseName;
+    /**
+     * 数据库连接
+     */
     private String databaseConnection;
+    /**
+     * 数据库用户名
+     */
     private String username;
+    /**
+     * 数据库密码
+     */
     private String password;
+    /**
+     * 数据库类型
+     */
     private String databaseType;
 }
