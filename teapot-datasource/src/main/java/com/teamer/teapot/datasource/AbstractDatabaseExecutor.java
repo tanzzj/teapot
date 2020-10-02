@@ -25,6 +25,17 @@ import java.util.*;
 public abstract class AbstractDatabaseExecutor {
 
     /**
+     * sql 执行成功
+     */
+    public static final String SQL_OPERATION_SUCCESS = "ok";
+
+    /**
+     * sql 执行失败
+     */
+    public static final String SQL_OPERATION_FAIL = "error";
+
+
+    /**
      * 加载数据源驱动
      *
      * @param dbType 数据源类型
@@ -77,6 +88,10 @@ public abstract class AbstractDatabaseExecutor {
             for (SQLStatement sqlStatement : sqlStatementList) {
                 responseList.add(this.execute(sqlStatement, connection));
             }
+            //存在任何失败的情况
+            if (responseList.stream().anyMatch(sqlExecuteResult -> SQL_OPERATION_FAIL.equals(sqlExecuteResult.getResult()))) {
+                return Result.fail("execution fail", responseList);
+            }
             //一并提交
             connection.commit();
             return Result.success(responseList);
@@ -124,16 +139,16 @@ public abstract class AbstractDatabaseExecutor {
                         .setMetaData(metaDataList)
                         .setDataList(resultList)
                         .setSqlType("select")
-                        .setResult("ok");
+                        .setResult(SQL_OPERATION_SUCCESS);
             } else {
                 statement.execute(sqlStatement.toLowerCaseString());
-                return new DatabaseDMLVO().setResult("ok").setSqlType("dml");
+                return new DatabaseDMLVO().setResult(SQL_OPERATION_SUCCESS).setSqlType("dml");
             }
         } catch (SQLException e) {
             log.error("sql exception:{}", e.getMessage());
             connection.rollback();
             return new DatabaseDMLVO()
-                    .setResult("error")
+                    .setResult(SQL_OPERATION_FAIL)
                     .setMessage("error sql :" + sqlStatement.toLowerCaseString() + "error message:" + e.getMessage());
         } finally {
             if (resultSet != null) {
