@@ -12,6 +12,7 @@
         <module>teapot-configuration</module>
         <module>teapot-project</module>
         <module>teapot-all</module>
+        <module>teapot-test</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
