@@ -39,11 +39,23 @@ public class DatabaseManagementServiceImplTest {
         TestUtil.assertSuccess(
                 databaseManagementService.addDatabase(
                         new Database()
-                                .setDatabaseConnection("202.135.136.147")
+                                .setDatabaseConnection("127.0.0.1")
                                 .setDatabaseName("mysql2")
                                 .setDatabaseType("mysql")
                                 .setUsername("tanzj")
                                 .setPassword("tanzj")
+                )
+        );
+    }
+
+    @Test
+    public void testConnectionTest() {
+        TestUtil.assertSuccess(
+                databaseManagementService.testConnection(
+                        new Database()
+                                .setDatabaseConnection("jdbc:mysql://127.0.0.1:3306/teapot")
+                                .setUsername("root")
+                                .setPassword("root")
                 )
         );
     }
