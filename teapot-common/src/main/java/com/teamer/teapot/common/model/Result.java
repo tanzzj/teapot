@@ -63,6 +63,14 @@ public class Result {
                 .setMessage(message);
     }
 
+    public static Result fail(String message, Object data) {
+        return new Result()
+                .setCode(FAIL_CODE)
+                .setResult(FAIL)
+                .setData(data)
+                .setMessage(message);
+    }
+
     public static Result fail(String message, String code) {
         return new Result()
                 .setCode(FAIL_CODE)

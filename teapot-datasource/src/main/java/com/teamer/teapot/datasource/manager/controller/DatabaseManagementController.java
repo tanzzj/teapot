@@ -54,5 +54,13 @@ public class DatabaseManagementController {
         return databaseManagementService.addDatabase(databaseParams);
     }
 
-
+    @PostMapping(value = "/testConnection")
+    public Result testConnection(@RequestBody Database databaseParams) {
+        ValidationUtil.validateParamsBlankAndNull(
+                databaseParams::getDatabaseConnection,
+                databaseParams::getPassword,
+                databaseParams::getPassword
+        );
+        return databaseManagementService.testConnection(databaseParams);
+    }
 }

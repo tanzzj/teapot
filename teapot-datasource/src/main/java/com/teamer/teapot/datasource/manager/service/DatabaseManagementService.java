@@ -12,15 +12,25 @@ public interface DatabaseManagementService {
 
     /**
      * query database instances list
+     *
      * @param databaseParams (databaseName - optional)
-     * @return  List<Database>
+     * @return List<Database>
      */
     Result queryDatabaseList(PageParam<Database> databaseParams);
 
     /**
      * add database
+     *
      * @param databaseParams instance
      * @return int
      */
     Result addDatabase(Database databaseParams);
+
+    /**
+     * 测试连接
+     *
+     * @param databaseParams (databaseConnection,databaseUsername,databasePassword)
+     * @return Result
+     */
+    Result testConnection(Database databaseParams);
 }
