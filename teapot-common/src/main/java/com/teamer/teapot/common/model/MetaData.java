@@ -15,6 +15,9 @@ public class MetaData {
 
     private String name;
     private Integer mysqlType;
+    /**
+     * 主键
+     */
     private Boolean primaryKey;
     private Boolean blob;
 
