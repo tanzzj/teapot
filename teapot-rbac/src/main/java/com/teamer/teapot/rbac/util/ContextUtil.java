@@ -16,6 +16,8 @@ public class ContextUtil {
 
     public static final String USER_PREFIX = "user";
 
+    private static final ThreadLocal<TeapotUser> HOLDER = new ThreadLocal<>();
+
     public static TeapotUser getUserFromContext(HttpServletRequest request) {
         Object user = request.getSession().getAttribute(USER_PREFIX);
         if (user instanceof TeapotUser) {
@@ -24,5 +26,17 @@ public class ContextUtil {
             log.info("user:{}", JSON.toJSONString(user));
             throw new ContextUserNotFoundException();
         }
+    }
+
+    public static TeapotUser getUserFromContext() {
+        return HOLDER.get();
+    }
+
+    public static void setUp(TeapotUser portalUser) {
+        HOLDER.set(portalUser);
+    }
+
+    public static void cleanUp() {
+        HOLDER.remove();
     }
 }

@@ -6,13 +6,16 @@ import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.rbac.RBACConfig;
 import com.teamer.teapot.rbac.model.Role;
 import com.teamer.teapot.rbac.model.TeapotUser;
+import com.teamer.teapot.rbac.util.ContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,8 +31,8 @@ import java.util.Map;
  * @date : 2020/7/3.
  */
 @Slf4j
-//@WebFilter
-//@Component
+@WebFilter
+@Component
 public class RBACFilter implements Filter, InitializingBean {
 
 
@@ -48,7 +51,8 @@ public class RBACFilter implements Filter, InitializingBean {
         //请求uri
         String requestUri = httpServletRequest.getRequestURI();
         //请求用户
-        TeapotUser teapotUser = ((TeapotUser) httpServletRequest.getSession().getAttribute("user"));
+        TeapotUser teapotUser = ContextUtil.getUserFromContext();
+
 
         //不需要登录鉴权的情况
         for (String ignoreUri : rbacConfig.getPermitList()) {
