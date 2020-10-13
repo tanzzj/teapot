@@ -2,13 +2,14 @@ package com.teamer.teapot.common.plugin.interceptor;
 
 import com.teamer.teapot.common.annoation.SensitiveData;
 import com.teamer.teapot.common.plugin.util.AESSensitive;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Plugin;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.executor.resultset.ResultSetHandler;
+import org.apache.ibatis.plugin.*;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
@@ -19,7 +20,11 @@ import java.util.Properties;
  *
  * @author tanzj
  */
+@Slf4j
 @Component
+@Intercepts({
+        @Signature(type = ResultSetHandler.class, method = "handleResultSets", args = {Statement.class})
+})
 public class DecryptInterceptor implements Interceptor {
 
 

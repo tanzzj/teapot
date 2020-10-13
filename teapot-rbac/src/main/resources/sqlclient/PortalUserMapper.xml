@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.teamer.teapot.rbac.UserDAO">
+<mapper namespace="com.teamer.teapot.rbac.dao.UserDAO">
 
-    <select id="queryPortalUser" parameterType="com.teamer.teapot.rbac.PortalUser"
-            resultType="com.teamer.teapot.rbac.PortalUser">
+    <select id="queryPortalUser" parameterType="com.teamer.teapot.rbac.model.TeapotUser"
+            resultType="com.teamer.teapot.rbac.model.TeapotUser">
        select
           userId,
           username,

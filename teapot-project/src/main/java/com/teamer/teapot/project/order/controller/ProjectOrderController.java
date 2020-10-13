@@ -1,13 +1,13 @@
 package com.teamer.teapot.project.order.controller;
 
 import com.teamer.teapot.common.model.PageParam;
-import com.teamer.teapot.rbac.PortalUser;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.model.dto.MergeOrderParams;
 import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.project.order.service.ProjectOrderService;
-import com.teamer.teapot.rbac.ContextUtil;
+import com.teamer.teapot.rbac.model.TeapotUser;
+import com.teamer.teapot.rbac.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,20 +45,20 @@ public class ProjectOrderController {
 
     @PostMapping("/createProjectOrder")
     public Result createProjectOrder(@RequestBody ProjectOrder projectOrder, HttpServletRequest httpServletRequest) {
-        PortalUser portalUser = ContextUtil.getUserFromContext(httpServletRequest);
+        TeapotUser teapotUser = ContextUtil.getUserFromContext(httpServletRequest);
         ValidationUtil.validateParamsBlankAndNull(
                 projectOrder::getProjectOrderName,
                 projectOrder::getProjectId,
                 projectOrder::getContent,
                 projectOrder::getOrderType
         );
-        projectOrder.setCreateUser(portalUser.getUsername()).setCreateUserId(portalUser.getUserId());
+        projectOrder.setCreateUser(teapotUser.getUsername()).setCreateUserId(teapotUser.getUserId());
         return projectOrderService.createProjectOrder(projectOrder);
     }
 
     @PostMapping("/queryProjectOrderAssignedToMe")
     public Result queryProjectOrderAssignedToMe(@RequestBody ProjectOrder projectOrder, HttpServletRequest httpServletRequest) {
-        PortalUser portalUser = ContextUtil.getUserFromContext(httpServletRequest);
+        TeapotUser teapotUser = ContextUtil.getUserFromContext(httpServletRequest);
         ValidationUtil.validateParamsBlankAndNull(projectOrder::getProjectId);
         return null;
     }
@@ -66,8 +66,8 @@ public class ProjectOrderController {
     @PostMapping("/examineOrder")
     public Result examineOrder(@RequestBody ProjectOrder projectOrder, HttpServletRequest httpServletRequest) {
         ValidationUtil.validateParamsBlankAndNull(projectOrder::getProjectOrderId);
-        PortalUser portalUser = ContextUtil.getUserFromContext(httpServletRequest);
-        projectOrder.setUpdateUser(portalUser.getUsername());
+        TeapotUser teapotUser = ContextUtil.getUserFromContext(httpServletRequest);
+        projectOrder.setUpdateUser(teapotUser.getUsername());
         return projectOrderService.examineProjectOrder(projectOrder);
     }
 
