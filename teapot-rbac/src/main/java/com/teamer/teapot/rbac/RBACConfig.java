@@ -1,5 +1,6 @@
 package com.teamer.teapot.rbac;
 
+import com.teamer.teapot.rbac.model.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
@@ -27,7 +28,7 @@ public class RBACConfig implements InitializingBean {
      * 权限资源列表
      * 默认为4个角色:portalUser,employee,visitor和counselor
      */
-    private List<RBACRole> resourceList = new ArrayList<>(4);
+    private List<Role> resourceList = new ArrayList<>(4);
 
     /**
      * 无需进入鉴权的资源uri
@@ -42,20 +43,20 @@ public class RBACConfig implements InitializingBean {
     /**
      * 以permission为key,roleNameList为value的资源列表
      */
-    private ConcurrentMap<String, List<RBACRole>> resourceMap = new ConcurrentHashMap<>();
+    private ConcurrentMap<String, List<Role>> resourceMap = new ConcurrentHashMap<>();
 
     @Override
     public void afterPropertiesSet() {
         this.resourceMap.clear();
         this.getResourceList().forEach(role ->
                 Arrays.stream(role.getResource()).forEach(resource -> {
-                    List<RBACRole> rbacRoles = Optional.ofNullable(resourceMap.get(resource))
+                    List<Role> roles = Optional.ofNullable(resourceMap.get(resource))
                             .orElseGet(() -> {
-                                List<RBACRole> roleList = new ArrayList<>();
+                                List<Role> roleList = new ArrayList<>();
                                 resourceMap.put(resource, roleList);
                                 return roleList;
                             });
-                    rbacRoles.add(RBACRole.getRole(role.getRoleId()));
+                    roles.add(Role.getRole(role.getRoleId()));
                 })
         );
     }

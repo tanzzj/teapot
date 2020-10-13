@@ -1,5 +1,6 @@
-package com.teamer.teapot.rbac;
+package com.teamer.teapot.rbac.dao;
 
+import com.teamer.teapot.rbac.model.TeapotUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,9 +13,9 @@ public interface UserDAO {
     /**
      * 查询用户
      *
-     * @param portalUserParams (username)
+     * @param teapotUserParams (username)
      * @return PortalUser
      */
-    PortalUser queryPortalUser(PortalUser portalUserParams);
+    TeapotUser queryPortalUser(TeapotUser teapotUserParams);
 
 }

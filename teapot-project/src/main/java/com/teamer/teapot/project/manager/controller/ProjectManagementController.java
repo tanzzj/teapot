@@ -1,11 +1,10 @@
 package com.teamer.teapot.project.manager.controller;
 
 import com.teamer.teapot.common.model.PageParam;
-import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.model.Project;
+import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.project.manager.service.ProjectManagementService;
-import com.teamer.teapot.rbac.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,4 @@
-package com.teamer.teapot.rbac;
+package com.teamer.teapot.rbac.exception;
 
 /** 上下文无法获取用户异常
  * @author ：luje

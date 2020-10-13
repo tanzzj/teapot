@@ -1,10 +1,10 @@
-package com.teamer.teapot.rbac;
+package com.teamer.teapot.rbac.model;
 
 
+import com.teamer.teapot.rbac.core.RBACUser;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.List;
 
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class PortalUser implements Serializable {
+public class TeapotUser implements RBACUser {
 
     public static final long serialVersionUID = 1L;
 
@@ -36,13 +36,29 @@ public class PortalUser implements Serializable {
 
     private Integer sex;
 
-    private List<RBACRole> rbacRoleList;
+    private List<Role> roleList;
 
-
-    public PortalUser(String userId) {
+    public TeapotUser(String userId) {
         this.userId = userId;
     }
 
-    public PortalUser() {
+    public TeapotUser() {
     }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public List<Role> getRoleList() {
+        return this.roleList;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.teamer.teapot.rbac;
 
 import com.teamer.teapot.common.model.Result;
+import com.teamer.teapot.rbac.exception.ContextUserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

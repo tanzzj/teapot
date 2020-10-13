@@ -1,8 +1,11 @@
-package com.teamer.teapot.rbac;
+package com.teamer.teapot.rbac.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.util.ValidationUtil;
+import com.teamer.teapot.rbac.RBACConfig;
+import com.teamer.teapot.rbac.model.Role;
+import com.teamer.teapot.rbac.model.TeapotUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +40,7 @@ public class RBACFilter implements Filter, InitializingBean {
      * key; resource
      * value: roleList
      */
-    private Map<String, List<RBACRole>> resourceMap;
+    private Map<String, List<Role>> resourceMap;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -45,21 +48,21 @@ public class RBACFilter implements Filter, InitializingBean {
         //请求uri
         String requestUri = httpServletRequest.getRequestURI();
         //请求用户
-        PortalUser portalUser = ((PortalUser) httpServletRequest.getSession().getAttribute("user"));
+        TeapotUser teapotUser = ((TeapotUser) httpServletRequest.getSession().getAttribute("user"));
 
         //不需要登录鉴权的情况
         for (String ignoreUri : rbacConfig.getPermitList()) {
-            if (com.teamer.teapot.common.util.ValidationUtil.stringMatcher(ignoreUri, requestUri)) {
+            if (ValidationUtil.stringMatcher(ignoreUri, requestUri)) {
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
         }
 
         //判定用户是否已经登录
-        this.assertUserLogined(portalUser, servletResponse);
+        this.assertUserLogined(teapotUser, servletResponse);
 
         //根据实际请求情况判定打回还是通过
-        if (isAuthenticated(portalUser, requestUri)) {
+        if (isAuthenticated(teapotUser, requestUri)) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             servletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
@@ -75,13 +78,13 @@ public class RBACFilter implements Filter, InitializingBean {
     /**
      * 判断用户的请求是否被授权
      *
-     * @param portalUser - 当前session用户
+     * @param teapotUser - 当前session用户
      * @param requestUri 目标请求资源
      * @return boolean 有权限返回true/否则返回false
      */
-    private boolean isAuthenticated(PortalUser portalUser, String requestUri) {
-        return portalUser != null &&
-                portalUser.getRbacRoleList().stream()
+    private boolean isAuthenticated(TeapotUser teapotUser, String requestUri) {
+        return teapotUser != null &&
+                teapotUser.getRoleList().stream()
                         .anyMatch(requestRole ->
                                 resourceMap.keySet().stream()
                                         //过滤出符合条件的资源keySet
@@ -97,11 +100,11 @@ public class RBACFilter implements Filter, InitializingBean {
     /**
      * 判定用户是否已经登录
      *
-     * @param portalUser      - 上下文用户
+     * @param teapotUser      - 上下文用户
      * @param servletResponse 返回值
      */
-    private void assertUserLogined(PortalUser portalUser, ServletResponse servletResponse) {
-        if (portalUser == null) {
+    private void assertUserLogined(TeapotUser teapotUser, ServletResponse servletResponse) {
+        if (teapotUser == null) {
             servletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
             ((HttpServletResponse) servletResponse).setStatus(HttpStatus.OK.value());
