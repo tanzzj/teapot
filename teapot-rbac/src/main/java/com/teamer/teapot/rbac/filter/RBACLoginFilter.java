@@ -7,7 +7,6 @@ import com.teamer.teapot.rbac.RBACConfig;
 import com.teamer.teapot.rbac.dao.UserDAO;
 import com.teamer.teapot.rbac.exception.ContextUserNotFoundException;
 import com.teamer.teapot.rbac.model.TeapotUser;
-import com.teamer.teapot.rbac.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+
+import static com.teamer.teapot.rbac.util.ContextUtil.USER_PREFIX;
 
 /**
  * @author : tanzj
@@ -45,7 +46,7 @@ public class RBACLoginFilter implements Filter {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         if (LOGIN_PATH.equals(httpServletRequest.getRequestURI())) {
-            if (ContextUtil.getUserFromContext() != null && !LOGIN_PATH.equals(httpServletRequest.getRequestURI())) {
+            if (httpServletRequest.getSession().getAttribute(USER_PREFIX) != null && !LOGIN_PATH.equals(httpServletRequest.getRequestURI())) {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
                 String requestData = this.readInputStream(httpServletRequest.getInputStream());
@@ -56,7 +57,7 @@ public class RBACLoginFilter implements Filter {
                 );
                 TeapotUser teapotUser = userDAO.queryPortalUser(new TeapotUser().setUsername(username));
                 if (teapotUser != null && teapotUser.getPassword().equals(password)) {
-                    ContextUtil.setUp(teapotUser);
+                    httpServletRequest.getSession().setAttribute(USER_PREFIX, teapotUser);
                     servletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                     servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
                     ((HttpServletResponse) servletResponse).setStatus(HttpStatus.OK.value());

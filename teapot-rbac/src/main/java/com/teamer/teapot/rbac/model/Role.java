@@ -16,12 +16,18 @@ public class Role implements RBACRole {
 
     public static final long serialVersionUID = 2653199762765194604L;
 
-
-//    private static final HashMap<String, Role> ROLE_MAP;
-
-
     private String roleId;
     private String[] resource;
+
+    @Override
+    public String[] getResource() {
+        return this.resource;
+    }
+
+    @Override
+    public String getRoleId() {
+        return this.roleId;
+    }
 
     public static Role getRole(String roleId) {
         return null;

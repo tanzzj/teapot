@@ -1,6 +1,7 @@
 package com.teamer.teapot.rbac.util;
 
 import com.alibaba.fastjson.JSON;
+import com.teamer.teapot.rbac.core.RBACUser;
 import com.teamer.teapot.rbac.exception.ContextUserNotFoundException;
 import com.teamer.teapot.rbac.model.TeapotUser;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ public class ContextUtil {
 
     public static final String USER_PREFIX = "user";
 
-    private static final ThreadLocal<TeapotUser> HOLDER = new ThreadLocal<>();
+    private static final ThreadLocal<RBACUser> HOLDER = new ThreadLocal<>();
 
     public static TeapotUser getUserFromContext(HttpServletRequest request) {
         Object user = request.getSession().getAttribute(USER_PREFIX);
@@ -28,12 +29,12 @@ public class ContextUtil {
         }
     }
 
-    public static TeapotUser getUserFromContext() {
+    public static RBACUser getUserFromContext() {
         return HOLDER.get();
     }
 
-    public static void setUp(TeapotUser portalUser) {
-        HOLDER.set(portalUser);
+    public static void setUp(RBACUser rbacUser) {
+        HOLDER.set(rbacUser);
     }
 
     public static void cleanUp() {
