@@ -1,10 +1,12 @@
 package com.teamer.teapot.rbac.model;
 
 
+import com.alibaba.fastjson.JSON;
 import com.teamer.teapot.rbac.core.RBACUser;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -57,8 +59,11 @@ public class TeapotUser implements RBACUser {
 
     @Override
     public List<Role> getRoleList() {
-        return this.roleList;
+        return this.roleList == null ? new ArrayList<>(0) : this.roleList;
     }
 
-
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
+    }
 }

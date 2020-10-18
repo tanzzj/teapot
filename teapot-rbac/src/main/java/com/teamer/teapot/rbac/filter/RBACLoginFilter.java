@@ -43,7 +43,6 @@ public class RBACLoginFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         if (LOGIN_PATH.equals(httpServletRequest.getRequestURI())) {
             if (httpServletRequest.getSession().getAttribute(USER_PREFIX) != null && !LOGIN_PATH.equals(httpServletRequest.getRequestURI())) {
