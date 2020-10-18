@@ -6,13 +6,16 @@ import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.rbac.RBACConfig;
 import com.teamer.teapot.rbac.core.RBACRole;
 import com.teamer.teapot.rbac.core.RBACUser;
+import com.teamer.teapot.rbac.util.ContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,13 +33,14 @@ import static com.teamer.teapot.rbac.util.ContextUtil.USER_PREFIX;
  * @date : 2020/7/3.
  */
 @Slf4j
-//@WebFilter
-//@Component
+@WebFilter
+@Component
 public class RBACFilter implements Filter, InitializingBean {
 
 
     @Autowired
     private RBACConfig rbacConfig;
+
 
     /**
      * key; resource
@@ -51,6 +55,10 @@ public class RBACFilter implements Filter, InitializingBean {
         String requestUri = httpServletRequest.getRequestURI();
         //请求用户
         RBACUser rbacUser = (RBACUser) httpServletRequest.getSession().getAttribute(USER_PREFIX);
+        //删除线程池缓存
+        ContextUtil.cleanUp();
+        //上下文存入存入线程本地变量
+        ContextUtil.setUp(rbacUser);
 
 
         //不需要登录鉴权的情况
@@ -86,8 +94,6 @@ public class RBACFilter implements Filter, InitializingBean {
      * @return boolean 有权限返回true/否则返回false
      */
     private boolean isAuthenticated(RBACUser rbacUser, String requestUri) {
-        log.info("resourceMap:" + JSON.toJSONString(resourceMap));
-        log.info("portalUser:" + JSON.toJSONString(rbacUser));
         return rbacUser != null &&
                 rbacUser.getRoleList().stream()
                         .anyMatch(requestRole ->

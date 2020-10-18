@@ -17,6 +17,11 @@
             <artifactId>teapot-common</artifactId>
             <version>0.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.teamer</groupId>
+            <artifactId>teapot-rbac</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
 </project>

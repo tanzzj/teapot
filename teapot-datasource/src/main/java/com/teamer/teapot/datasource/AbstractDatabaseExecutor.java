@@ -106,7 +106,7 @@ public abstract class AbstractDatabaseExecutor {
      * @return AbstractDatabaseExecuteVO
      * @throws SQLException sql异常
      */
-    private AbstractDatabaseExecuteVO execute(SQLStatement sqlStatement, Connection connection) throws SQLException {
+    protected AbstractDatabaseExecuteVO execute(SQLStatement sqlStatement, Connection connection) throws SQLException {
         ResultSet resultSet = null;
         try (Statement statement = connection.createStatement()) {
             if (sqlStatement instanceof SQLSelectStatement ||
