@@ -40,6 +40,5 @@ public class DatabaseTest {
 //        System.out.println(result);
 
         List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, "mysql");
-
     }
 }

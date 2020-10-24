@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author : tanzj
@@ -62,10 +63,10 @@ public class ProjectOrderServiceImplTest {
                                 .setOrderType(1 /*1-db模式*/)
                                 .setCreateUser("tanzj")
                                 .setCreateUserId("1")
-                                .setTag(new ArrayList<ProjectOrderTag>() {{
-                                    add(new ProjectOrderTag().setOrderTag("666"));
-                                    add(new ProjectOrderTag().setOrderTag("777"));
-                                }})
+                                .setTag(Arrays.asList(
+                                        new ProjectOrderTag().setOrderTag("666"),
+                                        new ProjectOrderTag().setOrderTag("777"))
+                                )
                 )
         );
     }
