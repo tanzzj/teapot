@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author : tanzj
@@ -117,9 +118,9 @@ public abstract class AbstractDatabaseExecutor {
                 //取得记录的行数
                 int columnCount = resultSet.getMetaData().getColumnCount();
                 //具体数据信息列表
-                List<Map> resultList = new ArrayList<>();
+                List<Map<String, Object>> resultList = new ArrayList<>();
                 //表元信息
-                Set<MetaData> metaDataList = new HashSet<>();
+                List<MetaData> metaDataList = new LinkedList<>();
                 while (resultSet.next()) {
                     //行记录
                     Map<String, Object> dataMap = new LinkedHashMap<>();
@@ -131,12 +132,12 @@ public abstract class AbstractDatabaseExecutor {
                         MetaData metaData = new MetaData()
                                 .setName(resultSet.getMetaData().getColumnName(i + 1))
                                 .setMysqlType(meta.getColumnType(i + 1));
-                        metaDataList.add(metaData);
+                        metaDataList.add(!metaDataList.contains(metaData) ? metaData : null);
                     }
                     resultList.add(dataMap);
                 }
                 return new DatabaseQueryVO()
-                        .setMetaData(metaDataList)
+                        .setMetaData(metaDataList.stream().filter(Objects::nonNull).collect(Collectors.toList()))
                         .setDataList(resultList)
                         .setSqlType("select")
                         .setResult(SQL_OPERATION_SUCCESS);

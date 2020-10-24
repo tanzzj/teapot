@@ -1,5 +1,6 @@
 package com.teamer.teapot.project.order.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.teamer.teapot.common.model.PageParam;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.ProjectOrderTag;
@@ -16,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author : tanzj
@@ -62,10 +64,10 @@ public class ProjectOrderServiceImplTest {
                                 .setOrderType(1 /*1-db模式*/)
                                 .setCreateUser("tanzj")
                                 .setCreateUserId("1")
-                                .setTag(new ArrayList<ProjectOrderTag>() {{
-                                    add(new ProjectOrderTag().setOrderTag("666"));
-                                    add(new ProjectOrderTag().setOrderTag("777"));
-                                }})
+                                .setTag(Arrays.asList(
+                                        new ProjectOrderTag().setOrderTag("666"),
+                                        new ProjectOrderTag().setOrderTag("777"))
+                                )
                 )
         );
     }
@@ -126,5 +128,14 @@ public class ProjectOrderServiceImplTest {
                                 }})
                 )
         );
+    }
+
+    @Test
+    public void test() {
+        JSONObject jsonObject = new JSONObject(true);
+        jsonObject.put("storeCode", "8999");
+        jsonObject.put("loginName", "41231613");
+        String data = jsonObject.toJSONString();
+        System.out.println(data);
     }
 }

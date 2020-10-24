@@ -11,9 +11,12 @@
           createTime
        from t_project
        <where>
-          <if test="projectName!=null and projectName!=''">
-              and  projectName like concat ('%',#{projectName},'%')
-          </if>
+           <if test="projectName!=null and projectName!=''">
+               and projectName like concat ('%',#{projectName},'%')
+           </if>
+           <if test="projectId!=null">
+               and projectId = #{projectId}
+           </if>
        </where>
      </select>
 

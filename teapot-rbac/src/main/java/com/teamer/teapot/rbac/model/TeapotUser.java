@@ -6,6 +6,7 @@ import com.teamer.teapot.rbac.core.RBACUser;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class TeapotUser implements RBACUser {
+public class TeapotUser implements RBACUser, Serializable {
 
     public static final long serialVersionUID = 1L;
 
