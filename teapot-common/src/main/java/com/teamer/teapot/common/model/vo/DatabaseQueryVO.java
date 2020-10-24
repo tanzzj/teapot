@@ -15,6 +15,6 @@ import java.util.Map;
 public class DatabaseQueryVO extends AbstractDatabaseExecuteVO {
 
     Object metaData;
-    List<Map> dataList;
+    List<Map<String, Object>> dataList;
 
 }
