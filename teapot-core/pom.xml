@@ -11,5 +11,11 @@
 
     <artifactId>teapot-core</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.teamer</groupId>
+            <artifactId>teapot-common</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
 </project>
