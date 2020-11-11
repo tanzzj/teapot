@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamer.teapot.core.tag.dao.TagDAO">
+
+    <sql id="baseColumns">
+        tagId,tagKey,tagValue,channel
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.teamer.teapot.common.model.BusinessTag">
+        <id property="businessId" column="businessId"/>
+        <id property="channel" column="channel"/>
+        <collection property="tagList" ofType="com.teamer.teapot.common.model.Tag">
+            <id property="id" column="id"/>
+            <id property="tagId" column="tagId"/>
+            <id property="tagKey" column="tagKey"/>
+            <id property="tagValue" column="tagValue"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="queryBusinessTagMapping" parameterType="com.teamer.teapot.common.model.Tag" resultMap="BaseResultMap">
+        select
+        tag.tagId,tag.tagKey,tagValue,channel,
+        businessId
+        from t_tag tag
+        left join
+        t_tag_mapping tagMapping
+        on tag.tagId = tagMapping.tagId
+        where businessId = #{businessId}
+        and tag.tagId = #{tagId}
+    </select>
+
+    <select id="queryTag" parameterType="com.teamer.teapot.common.model.Tag" resultMap="BaseResultMap">
+        select
+        <include refid="baseColumns"/>
+        from t_tag
+        where channel = #{channel}
+        <if test="tagId!=null">
+            and tagId = #{tagId},
+        </if>
+        <if test="businessId!=null">
+            and businessId = #{businessId}
+        </if>
+    </select>
+
+    <insert id="insertTagMapping" parameterType="com.teamer.teapot.common.model.Tag">
+        insert into t_tag_mapping(tagId,businessId)
+        value (#{tagId},#{businessId})
+    </insert>
+
+    <insert id="insertTag" parameterType="com.teamer.teapot.common.model.Tag">
+        insert into t_tag(tagId,tagKey,tagValue,channel)
+        value (#{tagId},#{tagKey},#{tagValue},#{channel})
+    </insert>
+
+    <update id="updateTagValue" parameterType="com.teamer.teapot.common.model.Tag">
+        update t_tag set tagValue = #{tagValue}
+    </update>
+</mapper>
