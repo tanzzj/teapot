@@ -1,5 +1,6 @@
 package com.teamer.teapot.project.order.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.teamer.teapot.common.model.PageParam;
 import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.ProjectOrderTag;
@@ -127,5 +128,14 @@ public class ProjectOrderServiceImplTest {
                                 }})
                 )
         );
+    }
+
+    @Test
+    public void test() {
+        JSONObject jsonObject = new JSONObject(true);
+        jsonObject.put("storeCode", "8999");
+        jsonObject.put("loginName", "41231613");
+        String data = jsonObject.toJSONString();
+        System.out.println(data);
     }
 }

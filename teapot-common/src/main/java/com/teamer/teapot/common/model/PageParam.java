@@ -30,42 +30,46 @@ public class PageParam<T> {
         return pageNum;
     }
 
-    public void setPageNum(int pageNum) {
+    public PageParam<T> setPageNum(int pageNum) {
         this.pageNum = pageNum;
+        return this;
     }
 
     public int getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(Integer pageSize) {
+    public PageParam<T> setPageSize(int pageSize) {
         this.pageSize = pageSize;
+        return this;
     }
 
     public String getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(String orderType) {
+    public PageParam<T> setOrderType(String orderType) {
         this.orderType = orderType;
+        return this;
     }
 
     public String getOrderMethod() {
         return orderMethod;
     }
 
-    public void setOrderMethod(String orderMethod) {
+    public PageParam<T> setOrderMethod(String orderMethod) {
         this.orderMethod = orderMethod;
+        return this;
     }
 
     public T getParams() {
         return params;
     }
 
-    public void setParams(T params) {
+    public PageParam<T> setParams(T params) {
         this.params = params;
+        return this;
     }
-
 
     /**
      * 分页 OrderMethod 枚举
