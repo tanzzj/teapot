@@ -8,6 +8,7 @@
         <result column="logsId" jdbcType="VARCHAR" property="logsId"/>
         <result column="projectOrderId" jdbcType="VARCHAR" property="projectOrderId"/>
         <result column="details" jdbcType="VARCHAR" property="details"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="updater" jdbcType="VARCHAR" property="updater"/>
         <result column="createTime" jdbcType="DATE" property="createTime"/>
@@ -15,7 +16,7 @@
     </resultMap>
 
     <sql id="base_column">
-     id,logsId,projectOrderId,details,creator,updater,createTime,updateTime
+     id,logsId,projectOrderId,description,details,creator,updater,createTime,updateTime
     </sql>
 
     <select id="queryProjectOrderLogs" parameterType="com.teamer.teapot.common.model.OrderLogs" resultMap="orderLogs">
@@ -28,8 +29,8 @@
     </select>
 
     <insert id="insertOrderLogs" parameterType="com.teamer.teapot.common.model.OrderLogs">
-        insert into t_teapot_order_logs(logsId, projectOrderId, details, creator, updater )
-        value (#{logsId},#{projectOrderId},#{details},#{creator},#{updater})
+        insert into t_teapot_order_logs(logsId, projectOrderId,description, details, creator, updater )
+        value (#{logsId},#{projectOrderId},#{description},#{details},#{creator},#{updater})
     </insert>
 
 

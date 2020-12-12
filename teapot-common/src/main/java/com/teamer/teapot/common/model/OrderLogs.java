@@ -17,6 +17,7 @@ public class OrderLogs {
     private Integer id;
     private String logsId;
     private String projectOrderId;
+    private String description;
     private String details;
     private String creator;
     private String updater;

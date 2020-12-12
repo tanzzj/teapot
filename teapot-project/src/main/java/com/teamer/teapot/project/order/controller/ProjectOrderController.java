@@ -92,7 +92,7 @@ public class ProjectOrderController {
 
     @PostMapping("/insertProjectOrderLogs")
     public Result insertProjectOrderLogs(@RequestBody OrderLogs orderLogs, HttpServletRequest request) {
-        ValidationUtil.validateParamsBlankAndNull(orderLogs::getProjectOrderId, orderLogs::getDetails);
+        ValidationUtil.validateParamsBlankAndNull(orderLogs::getProjectOrderId, orderLogs::getDetails, orderLogs::getDescription);
         orderLogs.setCreator(ContextUtil.getUserFromContext(request).getUsername());
         orderLogs.setUpdater(ContextUtil.getUserFromContext(request).getUsername());
         return projectOrderLogsService.insertProjectOrderLogs(orderLogs);
