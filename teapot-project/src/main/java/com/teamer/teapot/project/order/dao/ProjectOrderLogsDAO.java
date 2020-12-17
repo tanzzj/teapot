@@ -28,4 +28,15 @@ public interface ProjectOrderLogsDAO {
      */
     int insertOrderLogs(OrderLogs orderLogs);
 
+    /**
+     * 更新工单记录
+     *
+     * @param orderLogs description,
+     *                  details,
+     *                  executeLog,
+     *                  updater,
+     * @return int
+     */
+    int updateOrderLogs(OrderLogs orderLogs);
+
 }

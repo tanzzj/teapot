@@ -5,7 +5,7 @@ import com.teamer.teapot.common.model.ProjectDatabase;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.model.SQLParams;
 import com.teamer.teapot.common.util.UUIDFactory;
-import com.teamer.teapot.datasource.DefaultDatabaseExecutor;
+import com.teamer.teapot.datasource.DatabaseContext;
 import com.teamer.teapot.project.database.dao.ProjectDBDAO;
 import com.teamer.teapot.project.database.service.ProjectDBService;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +67,6 @@ public class ProjectDBServiceImpl implements ProjectDBService {
      */
     @Override
     public Result executeSQL(SQLParams sqlParams) throws SQLException {
-        return new DefaultDatabaseExecutor().executeSql(sqlParams);
+        return DatabaseContext.executeSql(sqlParams);
     }
 }

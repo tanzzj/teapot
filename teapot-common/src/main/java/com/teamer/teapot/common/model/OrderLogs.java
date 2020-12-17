@@ -23,6 +23,7 @@ public class OrderLogs {
     private String updater;
     private Date createTime;
     private Date updateTime;
+    private String executeLog;
 
     @Override
     public String toString() {

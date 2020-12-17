@@ -35,6 +35,8 @@ public abstract class AbstractDatabaseExecutor {
      */
     public static final String SQL_OPERATION_FAIL = "error";
 
+    protected ThreadLocal<Database> currentDatabase = new ThreadLocal<>();
+
 
     /**
      * 加载数据源驱动
@@ -50,7 +52,15 @@ public abstract class AbstractDatabaseExecutor {
      * @param databaseId 取得连接的数据库id
      * @return Database
      */
-    public abstract Database getDatabase(String databaseId);
+    public Database getDatabase(String databaseId) {
+        return currentDatabase.get();
+    }
+
+    public AbstractDatabaseExecutor setDatabase(Database database) {
+        currentDatabase.remove();
+        currentDatabase.set(database);
+        return this;
+    }
 
     /**
      * 执行目标db脚本
