@@ -12,4 +12,4 @@ ADD ${JAR_PATH}/${JAR_NAME} /${ENV_JAR}
 
 EXPOSE  ${JAR_PORT}
 
-ENTRYPOINT "java" "-jar" "/portal.jar"
+ENTRYPOINT "java" "-jar" "teapot-start.jar"
