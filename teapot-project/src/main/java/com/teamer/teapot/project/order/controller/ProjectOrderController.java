@@ -97,4 +97,10 @@ public class ProjectOrderController {
         orderLogs.setUpdater(ContextUtil.getUserFromContext(request).getUsername());
         return projectOrderLogsService.insertProjectOrderLogs(orderLogs);
     }
+
+    @PostMapping("/executeOrder")
+    public Result executeOrder(@RequestBody ProjectOrder projectOrder) {
+        ValidationUtil.validateParamsBlankAndNull(projectOrder::getProjectOrderId, projectOrder::getDatabaseId);
+        return projectOrderLogsService.executeOrder(projectOrder);
+    }
 }

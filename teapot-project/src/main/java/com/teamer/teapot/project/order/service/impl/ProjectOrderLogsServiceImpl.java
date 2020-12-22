@@ -1,21 +1,23 @@
 package com.teamer.teapot.project.order.service.impl;
 
-import com.teamer.teapot.common.model.OrderLogs;
-import com.teamer.teapot.common.model.PageParam;
-import com.teamer.teapot.common.model.Result;
+import com.teamer.teapot.common.model.*;
 import com.teamer.teapot.common.util.PageHelperUtil;
 import com.teamer.teapot.common.util.UUIDFactory;
+import com.teamer.teapot.datasource.DefaultDatabaseExecutor;
 import com.teamer.teapot.project.order.dao.ProjectOrderLogsDAO;
 import com.teamer.teapot.project.order.service.ProjectOrderLogsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
  * @author tanzj
  * @date 2020/12/8
  */
+@Slf4j
 @Component
 public class ProjectOrderLogsServiceImpl implements ProjectOrderLogsService {
 
@@ -47,5 +49,33 @@ public class ProjectOrderLogsServiceImpl implements ProjectOrderLogsService {
     public Result insertProjectOrderLogs(OrderLogs orderLogs) {
         projectOrderLogsDAO.insertOrderLogs(orderLogs.setLogsId(UUIDFactory.getShortUUID()));
         return Result.success(new OrderLogs().setLogsId(orderLogs.getLogsId()));
+    }
+
+    /**
+     * 执行工单
+     *
+     * @param projectOrder (projectId,databaseId)
+     * @return Result
+     */
+    @Override
+    public Result executeOrder(ProjectOrder projectOrder) {
+        DefaultDatabaseExecutor defaultDatabaseExecutor = new DefaultDatabaseExecutor();
+        StringBuilder sqlBuilder = new StringBuilder();
+        projectOrderLogsDAO.queryProjectOrderLogs(
+                new OrderLogs().setProjectOrderId(projectOrder.getProjectOrderId())
+        )
+                .stream()
+                .map(OrderLogs::getDetails)
+                .forEach(eachSql -> sqlBuilder.append(eachSql).append(";"));
+        try {
+            return defaultDatabaseExecutor.executeSql(
+                    new SQLParams()
+                            .setDatabaseId(projectOrder.getDatabaseId())
+                            .setSql(sqlBuilder.toString())
+            );
+        } catch (SQLException e) {
+            log.error("sql 执行失败", e);
+            return Result.fail("sql 执行失败", e);
+        }
     }
 }
