@@ -2,6 +2,7 @@ package com.teamer.teapot.project.order.service;
 
 import com.teamer.teapot.common.model.OrderLogs;
 import com.teamer.teapot.common.model.PageParam;
+import com.teamer.teapot.common.model.ProjectOrder;
 import com.teamer.teapot.common.model.Result;
 
 /**
@@ -26,4 +27,12 @@ public interface ProjectOrderLogsService {
      * @return Result
      */
     Result insertProjectOrderLogs(OrderLogs orderLogs);
+
+    /**
+     * 执行工单
+     *
+     * @param projectOrder (projectId,databaseId)
+     * @return Result
+     */
+    Result executeOrder(ProjectOrder projectOrder);
 }
