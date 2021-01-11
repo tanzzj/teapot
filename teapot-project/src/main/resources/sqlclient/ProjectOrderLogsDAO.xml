@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamer.teapot.project.order.dao.ProjectOrderLogsDAO">
+
+
+    <resultMap id="orderLogs" type="com.teamer.teapot.common.model.OrderLogs">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="logsId" jdbcType="VARCHAR" property="logsId"/>
+        <result column="projectOrderId" jdbcType="VARCHAR" property="projectOrderId"/>
+        <result column="details" jdbcType="VARCHAR" property="details"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="updater" jdbcType="VARCHAR" property="updater"/>
+        <result column="createTime" jdbcType="DATE" property="createTime"/>
+        <result column="updateTime" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+    <sql id="base_column">
+     id,logsId,projectOrderId,description,details,creator,updater,createTime,updateTime
+    </sql>
+
+    <select id="queryProjectOrderLogs" parameterType="com.teamer.teapot.common.model.OrderLogs" resultMap="orderLogs">
+        select
+        <include refid="base_column"/>
+        from
+        t_teapot_order_logs
+        where
+        projectOrderId = #{projectOrderId}
+    </select>
+
+    <insert id="insertOrderLogs" parameterType="com.teamer.teapot.common.model.OrderLogs">
+        insert into t_teapot_order_logs(logsId, projectOrderId,description, details, creator, updater )
+        value (#{logsId},#{projectOrderId},#{description},#{details},#{creator},#{updater})
+    </insert>
+
+
+</mapper>
