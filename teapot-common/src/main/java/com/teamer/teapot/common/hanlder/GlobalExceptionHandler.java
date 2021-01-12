@@ -1,5 +1,7 @@
 package com.teamer.teapot.common.hanlder;
 
+import com.teamer.teapot.common.exception.BusinessException;
+import com.teamer.teapot.common.exception.UserNotFoundException;
 import com.teamer.teapot.common.exception.ValidationException;
 import com.teamer.teapot.common.model.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +77,32 @@ public class GlobalExceptionHandler {
     public Result exception(Exception e) {
         log.error("出现异常", e);
         return Result.fail("服务异常");
+    }
+
+
+    /**
+     * 捕捉无法从上下文获取用户异常
+     *
+     * @param e Exception
+     * @return BaseModel
+     */
+    @ExceptionHandler(UserNotFoundException.class)
+    public Result contextUserNotFoundException(UserNotFoundException e) {
+        log.debug("无法从上下文获取到用户" + e);
+        return Result.fail(e.getMessage(), "401");
+    }
+
+
+    /**
+     * 捕捉无法从上下文获取用户异常
+     *
+     * @param e Exception
+     * @return BaseModel
+     */
+    @ExceptionHandler(BusinessException.class)
+    public Result businessException(BusinessException e) {
+        log.error("business exception" + e);
+        return Result.fail(e.getMessage(), "500");
     }
 
 }

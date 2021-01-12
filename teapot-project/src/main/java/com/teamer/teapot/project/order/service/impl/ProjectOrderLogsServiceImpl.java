@@ -1,17 +1,23 @@
 package com.teamer.teapot.project.order.service.impl;
 
+import com.teamer.teapot.common.exception.BusinessException;
 import com.teamer.teapot.common.model.*;
 import com.teamer.teapot.common.util.PageHelperUtil;
 import com.teamer.teapot.common.util.UUIDFactory;
-import com.teamer.teapot.datasource.DefaultDatabaseExecutor;
+import com.teamer.teapot.datasource.DatabaseContext;
 import com.teamer.teapot.project.order.dao.ProjectOrderLogsDAO;
 import com.teamer.teapot.project.order.service.ProjectOrderLogsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author tanzj
@@ -58,24 +64,45 @@ public class ProjectOrderLogsServiceImpl implements ProjectOrderLogsService {
      * @return Result
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public Result executeOrder(ProjectOrder projectOrder) {
-        DefaultDatabaseExecutor defaultDatabaseExecutor = new DefaultDatabaseExecutor();
         StringBuilder sqlBuilder = new StringBuilder();
-        projectOrderLogsDAO.queryProjectOrderLogs(
+        List<OrderLogs> orderLogsList = projectOrderLogsDAO.queryProjectOrderLogs(
                 new OrderLogs().setProjectOrderId(projectOrder.getProjectOrderId())
-        )
-                .stream()
-                .map(OrderLogs::getDetails)
-                .forEach(eachSql -> sqlBuilder.append(eachSql).append(";"));
+        );
+
+        orderLogsList.forEach(eachOrderLog -> {
+            boolean alreadyExecute = newArrayList(Optional.ofNullable(eachOrderLog.getExecuteLog()).orElse("")
+                    .split(";"))
+                    .stream()
+                    .anyMatch(eachDatabaseId -> eachDatabaseId.equals(projectOrder.getDatabaseId()));
+            if (alreadyExecute) {
+                throw new BusinessException("current order cannot be executed");
+            }
+            sqlBuilder.append(eachOrderLog.getDetails()).append(";");
+        });
+
         try {
-            return defaultDatabaseExecutor.executeSql(
+            Result result = DatabaseContext.executeSql(
                     new SQLParams()
                             .setDatabaseId(projectOrder.getDatabaseId())
                             .setSql(sqlBuilder.toString())
             );
+
+            orderLogsList.forEach(orderLogs ->
+                    projectOrderLogsDAO.updateOrderLogs(
+                            new OrderLogs()
+                                    .setLogsId(orderLogs.getLogsId())
+                                    .setExecuteLog(
+                                            Optional.ofNullable(orderLogs.getExecuteLog()).orElse("") + ";" + projectOrder.getDatabaseId()
+                                    )
+                    )
+            );
+            return result;
         } catch (SQLException e) {
             log.error("sql 执行失败", e);
             return Result.fail("sql 执行失败", e);
         }
     }
+
 }

@@ -61,7 +61,6 @@ public class ProjectOrderController {
 
     @PostMapping("/queryProjectOrderAssignedToMe")
     public Result queryProjectOrderAssignedToMe(@RequestBody ProjectOrder projectOrder, HttpServletRequest httpServletRequest) {
-        TeapotUser teapotUser = ContextUtil.getUserFromContext(httpServletRequest);
         ValidationUtil.validateParamsBlankAndNull(projectOrder::getProjectId);
         return null;
     }
