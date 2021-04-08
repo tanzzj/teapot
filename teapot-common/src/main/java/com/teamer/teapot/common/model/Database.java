@@ -37,6 +37,10 @@ public class Database {
      * 数据库类型
      */
     private String databaseType;
+    /**
+     * 所属环境
+     */
+    private String env;
 
     @Override
     public boolean equals(Object o) {

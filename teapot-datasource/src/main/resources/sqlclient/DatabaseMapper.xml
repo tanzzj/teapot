@@ -29,14 +29,16 @@
             databaseConnection,
             username,
             password,
-            databaseType
+            databaseType,
+            env
         ) value (
             #{databaseName},
             #{databaseId},
             #{databaseConnection},
             #{username},
             #{password},
-            #{databaseType}
+            #{databaseType},
+            #{env}
         )
     </insert>
 

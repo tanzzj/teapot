@@ -1,12 +1,10 @@
 package com.teamer.teapot.datasource.manager.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.teamer.teapot.common.model.Database;
 import com.teamer.teapot.common.model.PageParam;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.datasource.manager.service.DatabaseManagementService;
-import com.teamer.teapot.rbac.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,8 +49,10 @@ public class DatabaseManagementController {
                 databaseParams::getDatabaseName,
                 databaseParams::getDatabaseType,
                 databaseParams::getUsername,
-                databaseParams::getPassword
+                databaseParams::getPassword,
+                databaseParams::getEnv
         );
+
         return databaseManagementService.addDatabase(databaseParams);
     }
 
