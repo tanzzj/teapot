@@ -1,6 +1,7 @@
 package com.teamer.teapot.common.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @date 2020/11/10
  */
 @Data
+@Accessors(chain = true)
 public class BusinessTag {
 
     private String businessId;
