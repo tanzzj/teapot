@@ -9,19 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>teapot-test</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>com.teamer</groupId>
-            <artifactId>teapot-all</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
+    <artifactId>teapot-rule-client</artifactId>
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>QLExpress</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-    </dependencies>
 
 </project>

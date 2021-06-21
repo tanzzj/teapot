@@ -222,9 +222,7 @@ public class ValidationUtil {
                     log.error(e.getMessage());
                     throw new ValidationException("参数" + paramName + "异常");
                 }
-                stringBuilder.append(fieldName != null ?
-                        fieldName.value() :
-                        paramName).append("不能为空;");
+                stringBuilder.append(fieldName != null ? fieldName.value() : paramName).append("不能为空;");
             }
         }
         if (stringBuilder == null) {

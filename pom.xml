@@ -13,6 +13,8 @@
         <module>teapot-project</module>
         <module>teapot-all</module>
         <module>teapot-test</module>
+        <module>teapot-rule-server</module>
+        <module>teapot-rule-client</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

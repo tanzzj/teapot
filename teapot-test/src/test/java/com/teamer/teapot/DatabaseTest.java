@@ -3,10 +3,14 @@ package com.teamer.teapot;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.fastjson.JSON;
+import com.ql.util.express.DefaultContext;
+import com.ql.util.express.ExpressRunner;
+import com.teamer.teapot.common.model.Database;
 import org.junit.Test;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 public class DatabaseTest {
     @Test
@@ -40,5 +44,20 @@ public class DatabaseTest {
 //        System.out.println(result);
 
         List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, "mysql");
+
+    }
+
+    @Test
+    public void test() throws Exception {
+        ExpressRunner runner = new ExpressRunner();
+        DefaultContext<String, Object> context = new DefaultContext<>();
+        context.put("database", new Database().setEnv("123"));
+        String express = "com.teamer.teapot.DatabaseTest.invokeMethod(database)";
+        Object r = runner.execute(express, context, null, true, false);
+    }
+
+
+    public static void invokeMethod(Database database) {
+        System.out.println(Optional.ofNullable(database.getDatabaseName()).orElse("hello!!!"));
     }
 }
