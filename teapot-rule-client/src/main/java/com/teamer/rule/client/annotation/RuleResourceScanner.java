@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -21,7 +22,7 @@ public class RuleResourceScanner {
 
     static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
-    private static final Map<String, RuleResource> RESOURCE_MAP = new HashMap<>();
+    private static final Map<String, List<RuleResource>> RESOURCE_MAP = new HashMap<>();
 
     /**
      * scan path and put resources into resourceMap
@@ -32,19 +33,21 @@ public class RuleResourceScanner {
         Arrays.stream(basePackage).forEach(eachPath -> {
             Set<Class<?>> candidates = scanCandidateStrategyResource(eachPath);
             candidates.forEach(eachCandidate -> {
+                //todo 需要支持父类继承的情况
                 Field[] declaredFields = eachCandidate.getDeclaredFields();
                 for (Field declaredField : declaredFields) {
                     RuleField ruleField = declaredField.getAnnotation(RuleField.class);
-                    RESOURCE_MAP.put(
-                            eachCandidate.getName(),
-                            new RuleResource()
+                    RESOURCE_MAP
+                            .computeIfAbsent(eachCandidate.getName(), key -> new ArrayList<>())
+                            .add(new RuleResource()
                                     .setClassName(eachCandidate.getName())
                                     .setFieldName(declaredField.getName())
                                     .setFieldType(declaredField.getType().getName())
-                                    .setFieldDescription(ruleField.description())
                                     .setGroup(ruleField.group())
                                     .setNameSpace(ruleField.nameSpace())
-                    );
+                                    .setFieldDescription(StringUtils.isEmpty(ruleField.description()) ?
+                                            declaredField.getName() : ruleField.description()
+                                    ));
                 }
             });
         });
@@ -81,7 +84,7 @@ public class RuleResourceScanner {
         return basePackage.replace('.', '/');
     }
 
-    public Map<String, RuleResource> getResourceMap() {
+    public Map<String, List<RuleResource>> getResourceMap() {
         return RESOURCE_MAP;
     }
 }

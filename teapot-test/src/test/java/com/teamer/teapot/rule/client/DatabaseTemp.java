@@ -18,6 +18,6 @@ public class DatabaseTemp {
     private String name;
     @RuleField(description = "电话")
     private String phone;
-    @RuleField(description = "手机")
+    @RuleField
     private String mobile;
 }

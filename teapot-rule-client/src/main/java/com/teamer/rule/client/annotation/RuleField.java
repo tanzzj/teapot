@@ -16,7 +16,7 @@ public @interface RuleField {
 
     String group() default "DEFAULT";
 
-    String description();
+    String description() default "";
 
 
 }
