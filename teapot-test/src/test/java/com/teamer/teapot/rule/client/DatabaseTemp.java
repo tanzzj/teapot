@@ -12,12 +12,10 @@ import lombok.experimental.Accessors;
 @Data
 @RuleData(description = "")
 @Accessors(chain = true)
-public class DatabaseTemp {
+public class DatabaseTemp extends DatabaseTempSuper {
 
     @RuleField(description = "姓名")
     private String name;
     @RuleField(description = "电话")
     private String phone;
-    @RuleField
-    private String mobile;
 }

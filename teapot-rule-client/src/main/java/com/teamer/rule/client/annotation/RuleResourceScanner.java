@@ -7,11 +7,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author tanzj
@@ -25,6 +28,27 @@ public class RuleResourceScanner {
     private static final Map<String, List<RuleResource>> RESOURCE_MAP = new HashMap<>();
 
     /**
+     * The cache CLASS_FIELDS_CACHE
+     */
+    private static final Map<Class<?>, Field[]> CLASS_FIELDS_CACHE = new ConcurrentHashMap<>();
+
+    private static RuleResourceScanner instance;
+
+    private RuleResourceScanner() {
+    }
+
+    public static RuleResourceScanner getInstance() {
+        if (instance == null) {
+            synchronized (RuleResourceScanner.class) {
+                if (instance == null) {
+                    instance = new RuleResourceScanner();
+                }
+            }
+        }
+        return instance;
+    }
+
+    /**
      * scan path and put resources into resourceMap
      *
      * @param basePackage classPath
@@ -33,9 +57,8 @@ public class RuleResourceScanner {
         Arrays.stream(basePackage).forEach(eachPath -> {
             Set<Class<?>> candidates = scanCandidateStrategyResource(eachPath);
             candidates.forEach(eachCandidate -> {
-                //todo 需要支持父类继承的情况
-                Field[] declaredFields = eachCandidate.getDeclaredFields();
-                for (Field declaredField : declaredFields) {
+                Field[] allFields = getAllFields(eachCandidate);
+                for (Field declaredField : allFields) {
                     RuleField ruleField = declaredField.getAnnotation(RuleField.class);
                     RESOURCE_MAP
                             .computeIfAbsent(eachCandidate.getName(), key -> new ArrayList<>())
@@ -86,5 +109,44 @@ public class RuleResourceScanner {
 
     public Map<String, List<RuleResource>> getResourceMap() {
         return RESOURCE_MAP;
+    }
+
+    public static Field[] getAllFields(final Class<?> targetClazz) {
+        if (targetClazz == Object.class || targetClazz.isInterface()) {
+            return new Field[0];
+        }
+
+        // get from the cache
+        Field[] fields = CLASS_FIELDS_CACHE.get(targetClazz);
+        if (fields != null) {
+            return fields;
+        }
+
+        // load current class declared fields
+        fields = targetClazz.getDeclaredFields();
+        LinkedList<Field> fieldList = new LinkedList<>(Arrays.asList(fields));
+
+        // remove the static or synthetic fields
+        fieldList.removeIf(f -> Modifier.isStatic(f.getModifiers()) || f.isSynthetic());
+
+        // load super class all fields, and add to the field list
+        Field[] superFields = getAllFields(targetClazz.getSuperclass());
+        if (!CollectionUtils.isEmpty(Arrays.asList(superFields))) {
+            fieldList.addAll(Arrays.asList(superFields));
+        }
+
+        // list to array
+        Field[] resultFields;
+        if (!fieldList.isEmpty()) {
+            resultFields = fieldList.toArray(new Field[0]);
+        } else {
+            // reuse the EMPTY_FIELD_ARRAY
+            resultFields = new Field[0];
+        }
+
+        // set cache
+        CLASS_FIELDS_CACHE.put(targetClazz, resultFields);
+
+        return resultFields;
     }
 }
