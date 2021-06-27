@@ -25,7 +25,7 @@ public class RuleResourceScanner {
 
     static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
-    private static final Map<String, List<RuleResource>> RESOURCE_MAP = new HashMap<>();
+    private static final Map<String, List<RuleResource>> RULE_RESOURCE_MAP = new HashMap<>();
 
     /**
      * The cache CLASS_FIELDS_CACHE
@@ -60,7 +60,7 @@ public class RuleResourceScanner {
                 Field[] allFields = getAllFields(eachCandidate);
                 for (Field declaredField : allFields) {
                     RuleField ruleField = declaredField.getAnnotation(RuleField.class);
-                    RESOURCE_MAP
+                    RULE_RESOURCE_MAP
                             .computeIfAbsent(eachCandidate.getName(), key -> new ArrayList<>())
                             .add(new RuleResource()
                                     .setClassName(eachCandidate.getName())
@@ -108,7 +108,7 @@ public class RuleResourceScanner {
     }
 
     public Map<String, List<RuleResource>> getResourceMap() {
-        return RESOURCE_MAP;
+        return RULE_RESOURCE_MAP;
     }
 
     public static Field[] getAllFields(final Class<?> targetClazz) {
