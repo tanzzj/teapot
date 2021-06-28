@@ -7,6 +7,7 @@ import com.teamer.teapot.common.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 
+import java.beans.Introspector;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
@@ -203,7 +204,7 @@ public class ValidationUtil {
                     log.error(methodName + "方法不可执行");
                     throw new ValidationException("方法不可执行");
                 }
-                String paramName = methodName.substring(0, 1).toLowerCase() + methodName.substring(1);
+                String paramName = Introspector.decapitalize(methodName);
                 if (stringBuilder == null) {
                     stringBuilder = new StringBuilder();
                 }

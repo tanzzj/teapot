@@ -20,6 +20,11 @@
         </dependency>
         <dependency>
             <groupId>com.teamer</groupId>
+            <artifactId>teapot-core</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.teamer</groupId>
             <artifactId>teapot-configuration</artifactId>
             <version>${parent.version}</version>
         </dependency>
