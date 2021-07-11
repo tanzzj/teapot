@@ -1,4 +1,4 @@
-package com.teamer.rule.client.annotation;
+package com.teamer.rule.core.annotation;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

@@ -1,13 +1,15 @@
 package com.teamer.teapot.rule.client;
 
 import com.alibaba.fastjson.JSON;
-import com.teamer.rule.client.RuleClientConfig;
-import com.teamer.rule.client.annotation.RuleResource;
-import com.teamer.rule.client.annotation.RuleResourceScanner;
-import com.teamer.rule.client.api.RuleResourceUtil;
+import com.teamer.rule.core.RuleClientConfig;
+import com.teamer.rule.core.annotation.RuleResource;
+import com.teamer.rule.core.annotation.RuleResourceScanner;
+import com.teamer.rule.core.api.RuleResourceUtil;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -31,5 +33,14 @@ public class RuleResourceScannerTest {
         System.out.println(JSON.toJSONString(existResource));
         assert !CollectionUtils.isEmpty(existResource);
         assert CollectionUtils.isEmpty(notfound);
+    }
+
+    @Test
+    public void annotation() {
+        Method[] methods = RuleResourceUtil.class.getMethods();
+        for (Method method : methods) {
+            Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+            System.out.println(JSON.toJSONString(parameterAnnotations));
+        }
     }
 }

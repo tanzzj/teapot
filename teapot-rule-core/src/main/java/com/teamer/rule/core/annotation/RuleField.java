@@ -1,4 +1,4 @@
-package com.teamer.rule.client.annotation;
+package com.teamer.rule.core.annotation;
 
 import java.lang.annotation.*;
 
@@ -8,14 +8,15 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Inherited
-public @interface RuleData {
+public @interface RuleField {
 
     String nameSpace() default "DEFAULT";
 
     String group() default "DEFAULT";
 
-    String description();
+    String description() default "";
+
 
 }

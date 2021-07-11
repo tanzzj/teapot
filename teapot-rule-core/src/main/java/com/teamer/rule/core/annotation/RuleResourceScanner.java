@@ -1,4 +1,4 @@
-package com.teamer.rule.client.annotation;
+package com.teamer.rule.core.annotation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanDefinitionStoreException;

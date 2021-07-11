@@ -49,7 +49,7 @@
         </dependency>
         <dependency>
             <groupId>com.teamer</groupId>
-            <artifactId>teapot-rule-client</artifactId>
+            <artifactId>teapot-rule-core</artifactId>
             <version>${parent.version}</version>
         </dependency>
     </dependencies>

@@ -1,7 +1,7 @@
-package com.teamer.rule.client.api;
+package com.teamer.rule.core.api;
 
-import com.teamer.rule.client.annotation.RuleResource;
-import com.teamer.rule.client.annotation.RuleResourceScanner;
+import com.teamer.rule.core.annotation.RuleResource;
+import com.teamer.rule.core.annotation.RuleResourceScanner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 

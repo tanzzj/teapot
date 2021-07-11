@@ -1,6 +1,6 @@
-package com.teamer.rule.client;
+package com.teamer.rule.core;
 
-import com.teamer.rule.client.annotation.RuleResourceScanner;
+import com.teamer.rule.core.annotation.RuleResourceScanner;
 import com.teamer.teapot.common.util.YmlLoader;
 
 /**

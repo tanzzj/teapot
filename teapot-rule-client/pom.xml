@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.teamer</groupId>
-            <artifactId>teapot-common</artifactId>
+            <artifactId>teapot-rule-core</artifactId>
             <version>0.0.1</version>
         </dependency>
     </dependencies>

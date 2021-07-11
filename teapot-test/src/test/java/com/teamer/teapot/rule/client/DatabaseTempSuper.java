@@ -1,6 +1,6 @@
 package com.teamer.teapot.rule.client;
 
-import com.teamer.rule.client.annotation.RuleField;
+import com.teamer.rule.core.annotation.RuleField;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
