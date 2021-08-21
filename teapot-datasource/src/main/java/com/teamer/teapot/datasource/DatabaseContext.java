@@ -8,14 +8,15 @@ import com.teamer.teapot.common.exception.BusinessException;
 import com.teamer.teapot.common.model.Database;
 import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.model.SQLParams;
+import com.teamer.teapot.common.util.YmlLoader;
 import com.teamer.teapot.datasource.enums.DatabaseTypeEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 import java.sql.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 数据库策略模式执行上下文，用于选择应该使用的sql执行器策略
@@ -54,9 +55,9 @@ public class DatabaseContext {
     }
 
     private static Database getDatabase(String databaseId) {
-        String dbConnection = loadYaml(DB_CONNECTION_KEY).toString();
-        String username = loadYaml(DB_USERNAME_KEY).toString();
-        String password = loadYaml(DB_PASSWORD_KEY).toString();
+        String dbConnection = loadYaml(DB_CONNECTION_KEY, YML_PATH).toString();
+        String username = loadYaml(DB_USERNAME_KEY, YML_PATH).toString();
+        String password = loadYaml(DB_PASSWORD_KEY, YML_PATH).toString();
         try (Connection connection = DriverManager.getConnection(dbConnection, username, password)) {
             List<SQLStatement> sqlStatementList = SQLUtils.parseStatements(QUERY_DB_SQL_STATEMENT, MYSQL_TYPE);
             try (PreparedStatement statement = connection.prepareStatement(sqlStatementList.get(0).toLowerCaseString())) {
@@ -76,12 +77,8 @@ public class DatabaseContext {
         return null;
     }
 
-    public static Object loadYaml(String key) {
-        Resource resource = new ClassPathResource(YML_PATH);
-        YamlPropertiesFactoryBean yamlPropertiesFactoryBean = new YamlPropertiesFactoryBean();
-        yamlPropertiesFactoryBean.setResources(resource);
-        Properties properties = yamlPropertiesFactoryBean.getObject();
-        return Optional.ofNullable(properties.get(key)).orElseThrow(RuntimeException::new);
+    public static Object loadYaml(String key, String ymlPath) {
+        return YmlLoader.loadYaml(key, ymlPath);
     }
 
     private DatabaseContext() {

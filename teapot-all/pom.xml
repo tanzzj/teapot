@@ -47,6 +47,11 @@
             <artifactId>teapot-start</artifactId>
             <version>${parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.teamer</groupId>
+            <artifactId>teapot-rule-core</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

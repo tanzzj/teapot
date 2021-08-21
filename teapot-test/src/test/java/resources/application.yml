@@ -1,0 +1,3 @@
+teapot:
+  rule:
+    base-package: com.teamer.teapot.rule.*,com.taemer.teapot.start.*
