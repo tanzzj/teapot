@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author tanzj
@@ -15,5 +16,6 @@ public class StrategyBO {
 
     private List<RuleBO> ruleList;
     private List<ActionBO> actionList;
+    private Map<String, Object> extend;
 
 }
