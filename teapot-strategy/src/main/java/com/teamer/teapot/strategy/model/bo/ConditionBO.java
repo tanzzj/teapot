@@ -3,7 +3,6 @@ package com.teamer.teapot.strategy.model.bo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,10 +11,13 @@ import java.util.Map;
  */
 @Data
 @Accessors(chain = true)
-public class StrategyBO {
+public class ConditionBO {
 
     private Long id;
-    private List<RuleBO> ruleList;
+    private FactorBO factor;
+    private String operation;
+    private Object value;
+    private Boolean multiValue;
     private Map<String, Object> extend;
 
 }
