@@ -16,6 +16,7 @@
         <module>teapot-rule-server</module>
         <module>teapot-rule-core</module>
         <module>teapot-rule-client</module>
+        <module>teapot-strategy</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -39,6 +40,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-server</artifactId>
+            <version>1.5.2</version>
         </dependency>
 
         <dependency>
