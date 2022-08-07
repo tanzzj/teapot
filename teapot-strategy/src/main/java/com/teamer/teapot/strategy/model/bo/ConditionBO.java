@@ -1,5 +1,6 @@
 package com.teamer.teapot.strategy.model.bo;
 
+import com.teamer.teapot.strategy.constant.ComputeType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -15,13 +16,9 @@ public class ConditionBO {
 
     private Long id;
     private FactorBO factor;
-    private OperationType operation;
+    private ComputeType operation;
     private Object value;
     private Boolean multiValue;
     private Map<String, Object> extend;
-
-    public enum OperationType {
-
-    }
 
 }
