@@ -62,4 +62,7 @@ public class ComputerHolder {
         );
     }
 
+    private static BiFunction<Object, Object, Boolean> getOperator(ComputeType computeType) {
+        return COMPUTE_MAP.get(computeType);
+    }
 }
