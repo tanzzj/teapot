@@ -6,9 +6,17 @@ import com.alibaba.fastjson.JSON;
 import com.ql.util.express.DefaultContext;
 import com.ql.util.express.ExpressRunner;
 import com.teamer.teapot.common.model.Database;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.testcontainers.containers.MySQLContainer;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +31,7 @@ public class DatabaseTest {
         Statement stmt = connection.createStatement();
         ResultSet resultSet = stmt.executeQuery("select * from t_portal_user");
         System.out.println(JSON.toJSONString(resultSet.getMetaData().unwrap(Object.class)));
+
     }
 
     @Test
@@ -59,5 +68,23 @@ public class DatabaseTest {
 
     public static void invokeMethod(Database database) {
         System.out.println(Optional.ofNullable(database.getDatabaseName()).orElse("hello!!!"));
+    }
+
+
+    @ClassRule
+    public static MySQLContainer mysqld = (MySQLContainer) new MySQLContainer<>()
+        .withUsername("admin")
+        .withPassword("cnbp")
+        .withDatabaseName("cnbp");
+
+
+    @Before
+    public void init() {
+        mysqld.start();
+    }
+
+    @After
+    public void after() {
+        mysqld.stop();
     }
 }
