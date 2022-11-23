@@ -24,5 +24,6 @@
 
     <mappers>
         <!--这里填入你需要引入的MAPPER.XML-->
+        <mapper resource=""></mapper>
     </mappers>
 </configuration>

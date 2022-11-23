@@ -4,6 +4,7 @@ import com.teamer.teapot.util.H2DbSupportFactory;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 /**
@@ -45,7 +46,7 @@ public abstract class BaseMockitoTest {
      *
      * @see org.junit.BeforeClass
      */
-    public static void init() {
+    public static void init() throws IOException, Exception {
 
     }
 
