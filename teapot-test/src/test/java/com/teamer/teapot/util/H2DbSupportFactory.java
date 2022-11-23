@@ -19,11 +19,11 @@ import java.util.Arrays;
  */
 public class H2DbSupportFactory {
 
-    private static SqlSessionFactory sqlSessionFactory;
+    public static SqlSessionFactory sqlSessionFactory;
 
-    private static SqlSession sqlSession;
+    public static SqlSession sqlSession;
 
-    private boolean dataInited = false;
+    public boolean dataInited = false;
 
     static {
         //测试用的mybatis-test文件

@@ -5,5 +5,4 @@ package com.teamer.teapot.strategy.engine.builder;
  * @date 2022/8/8
  */
 public interface RuleBuilder {
-
 }
