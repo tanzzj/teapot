@@ -6,6 +6,7 @@ import com.teamer.teapot.common.model.Result;
 import com.teamer.teapot.common.util.ValidationUtil;
 import com.teamer.teapot.datasource.manager.service.DatabaseManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,8 @@ public class DatabaseManagementController {
      */
     @PostMapping(value = "/queryDatabaseList")
     public Result queryDatabaseList(@RequestBody PageParam<Database> databaseParams) {
+        DatabaseManagementController databaseManagementController = this;
+        System.out.println(databaseManagementController.getClass().getName());
         return databaseManagementService.queryDatabaseList(databaseParams);
     }
 
@@ -45,14 +48,13 @@ public class DatabaseManagementController {
     @PostMapping(value = "/addDatabase")
     public Result addDatabase(@RequestBody Database databaseParams, HttpServletRequest request) {
         ValidationUtil.validateParamsBlankAndNull(
-                databaseParams::getDatabaseConnection,
-                databaseParams::getDatabaseName,
-                databaseParams::getDatabaseType,
-                databaseParams::getUsername,
-                databaseParams::getPassword,
-                databaseParams::getEnv
+            databaseParams::getDatabaseConnection,
+            databaseParams::getDatabaseName,
+            databaseParams::getDatabaseType,
+            databaseParams::getUsername,
+            databaseParams::getPassword
         );
-
+        databaseParams.setEnv(StringUtils.isEmpty(databaseParams.getEnv()) ? "dev" : databaseParams.getEnv());
         return databaseManagementService.addDatabase(databaseParams);
     }
 

@@ -2,6 +2,7 @@ package com.teamer.teapot.datasource.manager.dao;
 
 import com.teamer.teapot.common.model.Database;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public interface DatabaseManagementDAO {
      * @param database (databaseName - optional)
      * @return List<Database>
      */
+    @Cacheable(cacheNames = "queryDatabaseList#1800", key = "'databaseList'+ #p0.id")
     List<Database> queryDatabaseList(Database database);
 
     /**
